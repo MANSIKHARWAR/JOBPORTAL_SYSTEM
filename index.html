@@ -1,0 +1,4965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexHire — Future of Work</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #16161f;
+    --card: #1a1a26;
+    --card2: #1f1f2e;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --accent: #6c63ff;
+    --accent2: #8b82ff;
+    --accent3: #a89fff;
+    --teal: #00d4aa;
+    --teal2: #00b894;
+    --coral: #ff6b6b;
+    --amber: #ffd93d;
+    --text: #f0f0f8;
+    --text2: #a0a0b8;
+    --text3: #606078;
+    --green: #00e676;
+    --red: #ff5252;
+    --blue: #448aff;
+    --purple: #ce93d8;
+    --radius: 14px;
+    --radius2: 20px;
+    --shadow: 0 8px 40px rgba(108,99,255,0.15);
+    --glow: 0 0 40px rgba(108,99,255,0.2);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  h1,h2,h3,h4,h5 { font-family: 'Syne', sans-serif; }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:1000;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 3rem;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--teal));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+    cursor: pointer;
+  }
+  .nav-links { display:flex; gap:2rem; align-items:center; }
+  .nav-links a {
+    color: var(--text2); text-decoration:none; font-size:0.9rem;
+    font-weight:500; transition: color .2s;
+    cursor: pointer;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--text); }
+  .nav-actions { display:flex; gap:1rem; align-items:center; }
+  .btn {
+    padding: 0.5rem 1.25rem; border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.875rem;
+    font-weight: 500; cursor: pointer; transition: all .2s;
+    border: none; text-decoration: none; display:inline-flex; align-items:center; gap:0.4rem;
+  }
+  .btn-ghost { background: transparent; color: var(--text2); border: 1px solid var(--border2); }
+  .btn-ghost:hover { color: var(--text); border-color: var(--accent); }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: var(--shadow); }
+  .btn-teal { background: var(--teal); color: #000; font-weight:600; }
+  .btn-teal:hover { background: var(--teal2); transform: translateY(-1px); }
+  .btn-outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .btn-outline:hover { background: rgba(108,99,255,0.1); }
+  .btn-sm { padding: 0.35rem 0.9rem; font-size: 0.8rem; }
+  .btn-lg { padding: 0.75rem 2rem; font-size:1rem; border-radius:12px; }
+  .btn-danger { background: rgba(255,82,82,0.15); color: var(--red); border: 1px solid rgba(255,82,82,0.3); }
+  .btn-success { background: rgba(0,230,118,0.15); color: var(--green); border: 1px solid rgba(0,230,118,0.3); }
+
+  /* ── PAGES ── */
+  .page { display:none; padding-top: 64px; min-height: 100vh; }
+  .page.active { display:block; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: calc(100vh - 64px);
+    display: flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding: 3rem 2rem;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content:'';
+    position:absolute; top:-200px; left:50%; transform:translateX(-50%);
+    width:800px; height:800px; border-radius:50%;
+    background: radial-gradient(ellipse, rgba(108,99,255,0.12) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.3);
+    border-radius:999px; padding: 0.35rem 1rem; font-size:0.8rem;
+    color: var(--accent3); margin-bottom:2rem;
+    animation: fadeUp .6s ease both;
+  }
+  .hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight:800; line-height:1.1; letter-spacing:-2px;
+    margin-bottom:1.5rem;
+    animation: fadeUp .6s ease .1s both;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--accent), var(--teal));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .hero p {
+    font-size:1.15rem; color:var(--text2); max-width:580px;
+    line-height:1.7; margin-bottom:3rem;
+    animation: fadeUp .6s ease .2s both;
+  }
+  .hero-search {
+    display:flex; gap:0; background:var(--card2);
+    border:1px solid var(--border2); border-radius:16px;
+    padding:0.4rem; max-width:720px; width:100%;
+    margin-bottom:2.5rem; box-shadow: var(--glow);
+    animation: fadeUp .6s ease .3s both;
+  }
+  .hero-search input, .hero-search select {
+    background:transparent; border:none; outline:none;
+    color:var(--text); font-family:'DM Sans',sans-serif;
+    font-size:0.95rem; padding:0.7rem 1rem; flex:1;
+  }
+  .hero-search select option { background:var(--card); }
+  .hero-search .divider { width:1px; background:var(--border); margin:0.3rem 0; }
+  .hero-search .btn { border-radius:12px; }
+  .hero-stats {
+    display:flex; gap:3rem; animation: fadeUp .6s ease .4s both;
+  }
+  .stat { text-align:center; }
+  .stat .num { font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:800; color:var(--text); }
+  .stat .label { font-size:0.8rem; color:var(--text2); }
+
+  /* ── SECTIONS ── */
+  .section { padding: 4rem 3rem; }
+  .section-sm { padding: 2rem 3rem; }
+  .section-title {
+    font-size:1.8rem; font-weight:800; letter-spacing:-0.5px;
+    margin-bottom:0.5rem;
+  }
+  .section-sub { color:var(--text2); font-size:0.95rem; margin-bottom:2rem; }
+
+  /* ── GRID ── */
+  .grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; }
+  .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem; }
+  .grid-auto { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.5rem; }
+
+  /* ── CARDS ── */
+  .card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:var(--radius2); padding:1.5rem;
+    transition: border-color .2s, transform .2s, box-shadow .2s;
+    position:relative; overflow:hidden;
+  }
+  .card:hover { border-color:var(--accent); transform:translateY(-2px); box-shadow:var(--shadow); }
+
+  /* ── JOB CARD ── */
+  .job-card { cursor:pointer; }
+  .job-card-header { display:flex; align-items:flex-start; gap:1rem; margin-bottom:1rem; }
+  .company-logo {
+    width:48px; height:48px; border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Syne',sans-serif; font-weight:800; font-size:1rem;
+    flex-shrink:0; color:#fff;
+  }
+  .job-card h3 { font-size:1rem; font-weight:700; margin-bottom:0.25rem; }
+  .job-card .company { font-size:0.85rem; color:var(--text2); }
+  .job-meta { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem; }
+  .tag {
+    padding:0.2rem 0.7rem; border-radius:999px; font-size:0.75rem;
+    font-weight:500;
+  }
+  .tag-purple { background:rgba(108,99,255,0.15); color:var(--accent3); border:1px solid rgba(108,99,255,0.2); }
+  .tag-teal { background:rgba(0,212,170,0.12); color:var(--teal); border:1px solid rgba(0,212,170,0.2); }
+  .tag-amber { background:rgba(255,217,61,0.12); color:var(--amber); border:1px solid rgba(255,217,61,0.2); }
+  .tag-coral { background:rgba(255,107,107,0.12); color:var(--coral); border:1px solid rgba(255,107,107,0.2); }
+  .tag-green { background:rgba(0,230,118,0.12); color:var(--green); border:1px solid rgba(0,230,118,0.2); }
+  .tag-blue { background:rgba(68,138,255,0.12); color:var(--blue); border:1px solid rgba(68,138,255,0.2); }
+  .job-card-footer { display:flex; align-items:center; justify-content:space-between; }
+  .salary { font-family:'Syne',sans-serif; font-weight:700; color:var(--teal); font-size:0.95rem; }
+  .posted { font-size:0.78rem; color:var(--text2); }
+
+  /* ── BADGE SAVED ── */
+  .save-btn {
+    width:32px; height:32px; border-radius:8px;
+    background:rgba(255,255,255,0.05); border:1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition: all .2s; color:var(--text2); font-size:0.85rem;
+  }
+  .save-btn:hover, .save-btn.saved { background:rgba(255,217,61,0.15); color:var(--amber); border-color:rgba(255,217,61,0.3); }
+
+  /* ── SIDEBAR FILTER ── */
+  .filter-sidebar {
+    width: 280px; flex-shrink:0;
+    background:var(--card); border:1px solid var(--border);
+    border-radius:var(--radius2); padding:1.5rem;
+    height:fit-content; position:sticky; top:80px;
+  }
+  .filter-group { margin-bottom:1.5rem; }
+  .filter-group h4 { font-size:0.85rem; font-weight:600; color:var(--text2); text-transform:uppercase; letter-spacing:1px; margin-bottom:0.75rem; }
+  .filter-option { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem; cursor:pointer; }
+  .filter-option input { accent-color:var(--accent); }
+  .filter-option label { font-size:0.875rem; cursor:pointer; }
+  .filter-option .count { margin-left:auto; font-size:0.75rem; color:var(--text2); }
+  .range-input { width:100%; accent-color:var(--accent); }
+
+  /* ── SEARCH BAR ── */
+  .search-bar {
+    display:flex; gap:0.75rem; margin-bottom:1.5rem; flex-wrap:wrap;
+  }
+  .search-input {
+    flex:1; min-width:200px;
+    background:var(--card2); border:1px solid var(--border);
+    border-radius:12px; padding:0.65rem 1rem 0.65rem 2.75rem;
+    color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.9rem;
+    outline:none; transition: border-color .2s;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236060a0' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.242 1.656a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:0.75rem center;
+  }
+  .search-input:focus { border-color:var(--accent); }
+  .select-input {
+    background:var(--card2); border:1px solid var(--border);
+    border-radius:12px; padding:0.65rem 1rem;
+    color:var(--text); font-family:'DM Sans',sans-serif; font-size:0.9rem;
+    outline:none; cursor:pointer;
+  }
+  .select-input option { background:var(--card); }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display:none; position:fixed; inset:0; z-index:2000;
+    background:rgba(0,0,0,0.7); backdrop-filter:blur(8px);
+    align-items:center; justify-content:center; padding:1rem;
+  }
+  .modal-overlay.open { display:flex; animation: fadeIn .2s ease; }
+  .modal {
+    background:var(--card); border:1px solid var(--border2);
+    border-radius:24px; padding:2rem; max-width:640px; width:100%;
+    max-height:90vh; overflow-y:auto;
+    position:relative;
+  }
+  .modal-close {
+    position:absolute; top:1rem; right:1rem;
+    background:rgba(255,255,255,0.05); border:none; color:var(--text2);
+    width:32px; height:32px; border-radius:8px;
+    cursor:pointer; font-size:1.1rem; display:flex; align-items:center; justify-content:center;
+    transition: all .2s;
+  }
+  .modal-close:hover { background:rgba(255,82,82,0.15); color:var(--red); }
+
+  /* ── FORMS ── */
+  .form-group { margin-bottom:1.25rem; }
+  .form-label { display:block; font-size:0.85rem; font-weight:500; color:var(--text2); margin-bottom:0.4rem; }
+  .form-input, .form-textarea, .form-select {
+    width:100%; background:var(--bg2); border:1px solid var(--border);
+    border-radius:10px; padding:0.65rem 1rem; color:var(--text);
+    font-family:'DM Sans',sans-serif; font-size:0.9rem; outline:none;
+    transition: border-color .2s;
+  }
+  .form-input:focus, .form-textarea:focus, .form-select:focus { border-color:var(--accent); }
+  .form-textarea { resize:vertical; min-height:100px; }
+  .form-select option { background:var(--card); }
+  .form-hint { font-size:0.78rem; color:var(--text2); margin-top:0.3rem; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+
+  /* ── TABS ── */
+  .tabs { display:flex; gap:0.25rem; border-bottom:1px solid var(--border); margin-bottom:2rem; }
+  .tab {
+    padding:0.65rem 1.25rem; font-size:0.875rem; font-weight:500;
+    color:var(--text2); cursor:pointer; border-bottom:2px solid transparent;
+    transition: all .2s; font-family:'DM Sans',sans-serif;
+  }
+  .tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+  .tab-content { display:none; }
+  .tab-content.active { display:block; }
+
+  /* ── DASHBOARD ── */
+  .dash-layout { display:flex; gap:1.5rem; padding:1.5rem 2rem; align-items:flex-start; }
+  .dash-sidebar {
+    width:240px; flex-shrink:0; background:var(--card);
+    border:1px solid var(--border); border-radius:var(--radius2);
+    padding:1.5rem; position:sticky; top:80px;
+  }
+  .dash-avatar {
+    width:64px; height:64px; border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Syne',sans-serif; font-weight:800; font-size:1.4rem;
+    margin-bottom:1rem; background:linear-gradient(135deg,var(--accent),var(--teal));
+    color: #fff;
+  }
+  .dash-sidebar h3 { font-size:1rem; font-weight:700; margin-bottom:0.2rem; }
+  .dash-sidebar p { font-size:0.8rem; color:var(--text2); margin-bottom:1.5rem; }
+  .dash-nav { list-style:none; }
+  .dash-nav li { margin-bottom:0.25rem; }
+  .dash-nav a {
+    display:flex; align-items:center; gap:0.6rem;
+    padding:0.6rem 0.75rem; border-radius:10px;
+    color:var(--text2); text-decoration:none; font-size:0.875rem;
+    transition: all .2s; cursor:pointer;
+  }
+  .dash-nav a:hover, .dash-nav a.active { background:rgba(108,99,255,0.1); color:var(--accent); }
+  .dash-main { flex:1; }
+  .dash-section { display:none; }
+  .dash-section.active { display:block; }
+
+  /* ── STATS CARDS ── */
+  .stat-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:var(--radius); padding:1.25rem;
+  }
+  .stat-card .icon {
+    width:40px; height:40px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.1rem; margin-bottom:0.75rem;
+  }
+  .stat-card .val { font-family:'Syne',sans-serif; font-size:1.75rem; font-weight:800; }
+  .stat-card .lbl { font-size:0.8rem; color:var(--text2); margin-top:0.2rem; }
+  .stat-card .change { font-size:0.75rem; margin-top:0.5rem; }
+  .change.up { color:var(--green); }
+  .change.dn { color:var(--red); }
+
+  /* ── APPLICANT TABLE ── */
+  .table-wrapper { overflow-x:auto; }
+  table { width:100%; border-collapse:collapse; font-size:0.875rem; }
+  thead th {
+    text-align:left; padding:0.75rem 1rem;
+    font-size:0.78rem; font-weight:600; color:var(--text2);
+    text-transform:uppercase; letter-spacing:0.5px;
+    border-bottom:1px solid var(--border);
+  }
+  tbody td { padding:0.9rem 1rem; border-bottom:1px solid var(--border); }
+  tbody tr:hover { background:rgba(255,255,255,0.02); }
+  tbody tr:last-child td { border-bottom:none; }
+
+  /* ── STATUS BADGES ── */
+  .status {
+    display:inline-flex; align-items:center; gap:0.3rem;
+    padding:0.2rem 0.6rem; border-radius:999px; font-size:0.75rem; font-weight:500;
+  }
+  .status::before { content:''; width:5px; height:5px; border-radius:50%; }
+  .status-pending { background:rgba(255,217,61,0.12); color:var(--amber); }
+  .status-pending::before { background:var(--amber); }
+  .status-interview { background:rgba(108,99,255,0.12); color:var(--accent3); }
+  .status-interview::before { background:var(--accent); }
+  .status-hired { background:rgba(0,230,118,0.12); color:var(--green); }
+  .status-hired::before { background:var(--green); }
+  .status-rejected { background:rgba(255,82,82,0.12); color:var(--red); }
+  .status-rejected::before { background:var(--red); }
+  .status-active { background:rgba(0,212,170,0.12); color:var(--teal); }
+  .status-active::before { background:var(--teal); }
+
+  /* ── PROFILE PHOTO UPLOAD ── */
+  .photo-upload {
+    width:80px; height:80px; border-radius:20px;
+    border:2px dashed var(--border2);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition: all .2s; font-size:1.5rem; color:var(--text2);
+    background:var(--bg2);
+  }
+  .photo-upload:hover { border-color:var(--accent); color:var(--accent); }
+
+  /* ── RESUME UPLOAD ── */
+  .resume-upload {
+    border:2px dashed var(--border2); border-radius:14px;
+    padding:2rem; text-align:center; cursor:pointer;
+    transition: all .2s;
+  }
+  .resume-upload:hover { border-color:var(--accent); background:rgba(108,99,255,0.05); }
+  .resume-upload i { font-size:2rem; color:var(--text2); margin-bottom:0.5rem; display:block; }
+  .resume-upload p { font-size:0.85rem; color:var(--text2); }
+
+  /* ── CHAT / MESSAGES ── */
+  .chat-list { border-right:1px solid var(--border); height:400px; overflow-y:auto; }
+  .chat-item {
+    padding:1rem; display:flex; gap:0.75rem; align-items:center;
+    cursor:pointer; transition: background .2s; border-bottom:1px solid var(--border);
+  }
+  .chat-item:hover, .chat-item.active { background:rgba(108,99,255,0.08); }
+  .chat-avatar {
+    width:40px; height:40px; border-radius:12px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Syne',sans-serif; font-weight:700; font-size:0.9rem;
+    color: #fff;
+  }
+  .chat-messages { padding:1rem; height:320px; overflow-y:auto; display:flex; flex-direction:column; gap:0.75rem; }
+  .msg { max-width:75%; display: flex; flex-direction: column; }
+  .msg.sent { align-self:flex-end; }
+  .msg.recv { align-self:flex-start; }
+  .msg-bubble {
+    padding:0.65rem 0.9rem; border-radius:14px;
+    font-size:0.875rem; line-height:1.5;
+  }
+  .msg.recv .msg-bubble { background:var(--card2); border-radius:14px 14px 14px 4px; color: var(--text); }
+  .msg.sent .msg-bubble { background:var(--accent); border-radius:14px 14px 4px 14px; color: #fff; }
+  .msg-time { font-size:0.7rem; color:var(--text2); margin-top:0.25rem; text-align:right; }
+  .msg.recv .msg-time { text-align:left; }
+  .chat-input-bar {
+    padding:1rem; border-top:1px solid var(--border);
+    display:flex; gap:0.5rem;
+  }
+  .chat-input {
+    flex:1; background:var(--bg2); border:1px solid var(--border);
+    border-radius:10px; padding:0.6rem 1rem;
+    color:var(--text); font-family:'DM Sans',sans-serif; outline:none;
+    transition: border-color .2s;
+  }
+  .chat-input:focus { border-color:var(--accent); }
+
+  /* ── NOTIFICATION TOAST ── */
+  .notif-toast {
+    position:fixed; bottom:2rem; right:2rem; z-index:3000;
+    background:var(--card2); border:1px solid var(--border2);
+    border-radius:14px; padding:1rem 1.5rem;
+    display:none; align-items:center; gap:0.75rem;
+    min-width:280px; box-shadow:0 8px 32px rgba(0,0,0,0.4);
+    animation: slideIn .3s ease;
+  }
+  @keyframes slideIn { from{opacity:0;transform:translateX(100px)} to{opacity:1;transform:translateX(0)} }
+  .notif-icon { font-size:1.2rem; }
+  .notif-msg { font-size:0.875rem; }
+
+  /* ── COMPANIES GRID ── */
+  .company-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:var(--radius2); padding:1.5rem; text-align:center;
+    transition: all .2s; cursor:pointer;
+  }
+  .company-card:hover { border-color:var(--accent); transform:translateY(-2px); }
+  .company-card .logo-big {
+    width:64px; height:64px; border-radius:16px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Syne',sans-serif; font-weight:800; font-size:1.3rem;
+    margin:0 auto 1rem; color: #fff;
+  }
+  .company-card h3 { font-size:1rem; font-weight:700; margin-bottom:0.25rem; }
+  .company-card p { font-size:0.8rem; color:var(--text2); margin-bottom:0.5rem; }
+  .company-card .open-roles { color:var(--teal); font-size:0.8rem; font-weight:600; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonial-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:var(--radius2); padding:2rem; position:relative;
+  }
+  .testimonial-card::before {
+    content:'"'; position:absolute; top:-0.5rem; left:1.5rem;
+    font-size:5rem; line-height:1; color:var(--accent);
+    opacity:0.3; font-family:'Syne',sans-serif;
+  }
+  .testimonial-card p { font-size:0.95rem; line-height:1.7; color:var(--text2); margin-bottom:1.25rem; }
+  .testimonial-author { display:flex; align-items:center; gap:0.75rem; }
+  .testimonial-author .ta-avatar {
+    width:40px; height:40px; border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:0.9rem; color: #fff;
+  }
+  .ta-name { font-weight:600; font-size:0.875rem; }
+  .ta-role { font-size:0.78rem; color:var(--text2); }
+  .stars { color:var(--amber); font-size:0.85rem; margin-bottom:0.75rem; }
+
+  /* ── CATEGORIES ── */
+  .cat-card {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:var(--radius2); padding:1.5rem;
+    display:flex; align-items:center; gap:1rem;
+    cursor:pointer; transition: all .2s;
+  }
+  .cat-card:hover { border-color:var(--accent); background:rgba(108,99,255,0.05); }
+  .cat-icon {
+    width:48px; height:48px; border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.3rem; flex-shrink:0;
+  }
+  .cat-card h4 { font-size:0.95rem; font-weight:700; margin-bottom:0.2rem; }
+  .cat-card p { font-size:0.8rem; color:var(--text2); }
+
+  /* ── PROGRESS BAR ── */
+  .progress { background:var(--bg2); border-radius:999px; height:6px; overflow:hidden; }
+  .progress-fill { height:100%; border-radius:999px; transition: width .5s ease; }
+
+  /* ── SKILLS TAGS ── */
+  .skills-container { display:flex; flex-wrap:wrap; gap:0.5rem; }
+  .skill-tag {
+    padding:0.25rem 0.7rem; border-radius:8px;
+    background:rgba(108,99,255,0.12); border:1px solid rgba(108,99,255,0.2);
+    color:var(--accent3); font-size:0.8rem; font-weight:500;
+    display:flex; align-items:center; gap:0.3rem;
+  }
+  .skill-tag .remove { cursor:pointer; opacity:0.5; transition: opacity .2s; }
+  .skill-tag .remove:hover { opacity:1; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state { text-align:center; padding:3rem; color:var(--text2); }
+  .empty-state i { font-size:3rem; margin-bottom:1rem; opacity:0.3; display:block; }
+  .empty-state h3 { font-size:1rem; font-weight:600; margin-bottom:0.5rem; color:var(--text); }
+
+  /* ── HR CALL ── */
+  .call-card {
+    background: linear-gradient(135deg, rgba(108,99,255,0.15), rgba(0,212,170,0.1));
+    border:1px solid rgba(108,99,255,0.3); border-radius:var(--radius2);
+    padding:1.75rem;
+  }
+  .call-slot {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0.75rem 1rem; background:var(--bg2); border-radius:12px;
+    margin-bottom:0.5rem; font-size:0.875rem;
+  }
+  .call-slot .time { font-weight:600; }
+  .call-slot .host { color:var(--text2); font-size:0.8rem; }
+
+  /* ── MOBILE NAV ── */
+  .mobile-nav-toggle { display:none; background:none; border:none; color:var(--text); font-size:1.3rem; cursor:pointer; }
+
+  /* ── FOOTER ── */
+  footer {
+    background:var(--bg2); border-top:1px solid var(--border);
+    padding:3rem; margin-top:4rem; text-align: center;
+  }
+  footer a { color:var(--text2); text-decoration:none; font-size:0.875rem; transition: color .2s; margin: 0 1rem; }
+  footer a:hover { color:var(--accent); }
+  footer p { font-size:0.8rem; color:var(--text3); margin-top:1rem; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:900px) {
+    .grid-3, .grid-4 { grid-template-columns: repeat(2,1fr); }
+    .dash-layout { flex-direction:column; }
+    .dash-sidebar { width:100%; position:static; }
+    nav { padding:0 1.5rem; }
+    .section { padding:3rem 1.5rem; }
+    .hero-search { flex-direction:column; gap: 0.5rem; padding: 1rem; }
+    .hero-search .divider { display: none; }
+    .filter-sidebar { width:100%; position:static; }
+  }
+  @media(max-width:600px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns:1fr; }
+    .nav-links { display:none; }
+    .mobile-nav-toggle { display:block; }
+    .form-row { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ───────────── NAV ───────────── -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">NexHire</div>
+  <div class="nav-links" id="navLinks">
+    <a onclick="showPage('home')" class="active" id="nav-home">Home</a>
+    <a onclick="showPage('jobs')" id="nav-jobs">Find Jobs</a>
+    <a onclick="showPage('companies')" id="nav-companies">Companies</a>
+    <a onclick="showPage('testimonials')" id="nav-testimonials">Success Stories</a>
+    <a onclick="showPage('recruiter')" id="nav-recruiter">For Recruiters</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn btn-ghost btn-sm" onclick="openModal('notifModal')" style="position:relative;">
+      <i class="fas fa-bell"></i>
+      <span style="position:absolute;top:2px;right:2px;width:8px;height:8px;background:var(--coral);border-radius:50%;"></span>
+    </button>
+    <button class="btn btn-ghost btn-sm" onclick="showPage('employee-dash')" id="btnEmployee">
+      <i class="fas fa-user"></i> Dashboard
+    </button>
+    <button class="btn btn-primary btn-sm" onclick="openModal('postJobModal')">Post a Job</button>
+  </div>
+  <button class="mobile-nav-toggle" onclick="toggleMobileNav()"><i class="fas fa-bars"></i></button>
+</nav>
+
+<!-- ───────────── NOTIFICATIONS MODAL ───────────── -->
+<div class="modal-overlay" id="notifModal">
+  <div class="modal" style="max-width:420px;">
+    <button class="modal-close" onclick="closeModal('notifModal')"><i class="fas fa-times"></i></button>
+    <h3 style="margin-bottom:1.25rem;">Notifications</h3>
+    <div style="display:flex;flex-direction:column;gap:0.75rem;">
+      <div class="card" style="padding:1rem;border-left:3px solid var(--accent);">
+        <div style="display:flex;gap:0.6rem;align-items:flex-start;">
+          <span style="font-size:1.2rem;">🎉</span>
+          <div>
+            <p style="font-size:0.875rem;font-weight:500;">Application Shortlisted!</p>
+            <p style="font-size:0.8rem;color:var(--text2);margin-top:0.2rem;">Your application for <strong>Senior UX Designer</strong> at TechVault has been shortlisted.</p>
+            <p style="font-size:0.75rem;color:var(--text3);margin-top:0.4rem;">2 hours ago</p>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:1rem;border-left:3px solid var(--teal);">
+        <div style="display:flex;gap:0.6rem;align-items:flex-start;">
+          <span style="font-size:1.2rem;">📞</span>
+          <div>
+            <p style="font-size:0.875rem;font-weight:500;">HR Call Tomorrow</p>
+            <p style="font-size:0.8rem;color:var(--text2);margin-top:0.2rem;">Zara Khan from InnovateCo will call you tomorrow at 11:00 AM.</p>
+            <p style="font-size:0.75rem;color:var(--text3);margin-top:0.4rem;">5 hours ago</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ───────────── POST JOB MODAL ───────────── -->
+<div class="modal-overlay" id="postJobModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('postJobModal')"><i class="fas fa-times"></i></button>
+    <h3 style="margin-bottom:1.5rem;">Post an Open Role</h3>
+    <form id="jobPostForm" onsubmit="handleJobPost(event)">
+      <div class="form-group">
+        <label class="form-label">Job Title</label>
+        <input type="text" class="form-input" id="postTitle" required placeholder="e.g. Senior Frontend Developer">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Company Name</label>
+          <input type="text" class="form-input" id="postCompany" required placeholder="e.g. Stripe">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Location</label>
+          <input type="text" class="form-input" id="postLocation" required placeholder="e.g. Remote / Delhi, IN">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-select" id="postCategory">
+            <option value="Development">Development</option>
+            <option value="Design">Design</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Product">Product Management</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Salary Range</label>
+          <input type="text" class="form-input" id="postSalary" required placeholder="e.g. $120k - $140k">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg" style="width:100%; justify-content:center;">Publish Listing</button>
+    </form>
+  </div>
+</div>
+
+<!-- ───────────── PAGE: HOME ───────────── -->
+<!-- ───────────── PAGE: NEXT-GEN AI CAREER TERMINAL (HOME) ───────────── -->
+<div class="page active" id="page-home">
+  
+  <!-- HERO CONTEXT: DEEP INTEGRATION WORKSPACE -->
+  <section class="hero-section">
+    <div class="hero-bg-grid"></div>
+    
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="pulse-dot"></span> 12,400+ algorithmic vectors compiled today
+      </div>
+      
+      <h1 class="hero-title">
+        Your Profile is the Query. <br>Let the <span class="gradient-text">Dream Role Find You</span>.
+      </h1>
+      <p class="hero-subtitle">
+        NexHire strips away legacy applications. Our cognitive matching engines run programmatic simulations pairing your direct competency matrices with verified enterprise pipelines.
+      </p>
+
+      <!-- INNOVATION: THE DYNAMIC COMMAND OMNIBAR -->
+      <div class="omnibar-container">
+        <div class="omnibar-input-group flex-input">
+          <i class="fas fa-wand-magic-sparkles omnibar-icon-accent"></i>
+          <input type="text" id="heroSearch" placeholder="Type a stack or ask: 'Remote React roles with ₹20L min'...">
+        </div>
+        
+        <div class="omnibar-divider"></div>
+        
+        <div class="omnibar-input-group flex-select">
+          <i class="fas fa-location-crosshairs omnibar-icon-muted"></i>
+          <select id="heroLocation">
+            <option value="">Global Matrix</option>
+            <option value="Remote">Remote Only</option>
+            <option value="Delhi">Delhi NCR, IN</option>
+            <option value="Bangalore">Bangalore, IN</option>
+            <option value="San Francisco">San Francisco, US</option>
+          </select>
+        </div>
+        
+        <button class="engine-btn" onclick="triggerHeroSearch()">
+          Initialize Engine
+        </button>
+      </div>
+
+      <!-- STREAMLINED LIVE PERFORMANCE INDEXING METRICS -->
+      <div class="metrics-container">
+        <div class="metric-block">
+          <div class="metric-num">42k+</div>
+          <div class="metric-label">Calibrated Talents</div>
+        </div>
+        <div class="metric-block">
+          <div class="metric-num">8.2k+</div>
+          <div class="metric-label">Node Providers</div>
+        </div>
+        <div class="metric-block">
+          <div class="metric-num text-teal">94.8%</div>
+          <div class="metric-label">Resolution Fit</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INNOVATION: LIVE SECTOR HEATMAP & RADAR BLOCK -->
+  <section class="radar-section">
+    <div class="radar-container">
+      
+      <div class="radar-header">
+        <div>
+          <h2 class="radar-title">Market Sector Proximity Radar</h2>
+          <p class="radar-subtitle">Analyse live density variations across macro ecosystems instantly.</p>
+        </div>
+        <span class="sync-badge">
+          <i class="fas fa-rotate"></i> Syncing Real-time Flux
+        </span>
+      </div>
+
+      <!-- THE GRID HEATMAP -->
+      <div class="heatmap-grid">
+        
+        <!-- CARD 1: DEVELOPMENT -->
+        <div class="node-card card-dev" onclick="filterByCat('Development')">
+          <div class="card-top">
+            <div class="icon-box icon-dev">
+              <i class="fas fa-code"></i>
+            </div>
+            <span class="status-pill pill-dev">High Velocity</span>
+          </div>
+          <div class="card-body">
+            <h4>Development Nodes</h4>
+            <p>4,200+ Active Endpoints</p>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill fill-dev"></div>
+          </div>
+        </div>
+
+        <!-- CARD 2: DESIGN -->
+        <div class="node-card card-design" onclick="filterByCat('Design')">
+          <div class="card-top">
+            <div class="icon-box icon-design">
+              <i class="fas fa-palette"></i>
+            </div>
+            <span class="status-pill pill-stable">Stable Flux</span>
+          </div>
+          <div class="card-body">
+            <h4>Creative UI/UX Matrix</h4>
+            <p>1,800+ Active Endpoints</p>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill fill-design"></div>
+          </div>
+        </div>
+
+        <!-- CARD 3: MARKETING -->
+        <div class="node-card card-marketing" onclick="filterByCat('Marketing')">
+          <div class="card-top">
+            <div class="icon-box icon-marketing">
+              <i class="fas fa-bullhorn"></i>
+            </div>
+            <span class="status-pill pill-marketing">Expanding</span>
+          </div>
+          <div class="card-body">
+            <h4>Growth & Campaign</h4>
+            <p>950+ Active Endpoints</p>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill fill-marketing"></div>
+          </div>
+        </div>
+
+        <!-- CARD 4: MANAGEMENT -->
+        <div class="node-card card-product" onclick="filterByCat('Product')">
+          <div class="card-top">
+            <div class="icon-box icon-product">
+              <i class="fas fa-layer-group"></i>
+            </div>
+            <span class="status-pill pill-product">Competitive</span>
+          </div>
+          <div class="card-body">
+            <h4>Product Strategy</h4>
+            <p>620+ Active Endpoints</p>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill fill-product"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ───────────── NEXT-GEN DARK CONFIGURATION MATRIX ───────────── -->
+<style>
+
+  
+  /* Cyberpunk / High-Tech Dark Tokens */
+  :root {
+    --bg-primary: #090d16;     /* Deep cosmic background */
+    --bg-secondary: #0f1524;   /* Surface background for sections */
+    --bg-card: #172033;        /* Elevation tint for cards */
+    --bg-input: #121a2b;       /* Dark omnibar inner background */
+    --text-main: #f1f5f9;      /* Crisp off-white text */
+    --text-muted: #94a3b8;     /* Sleek slate secondary text */
+    --text-slate: #cbd5e1;     /* Interactive elements text */
+    --border-light: #1e293b;   /* Soft layout partition */
+    --border-mid: #334155;     /* Structural borders */
+    
+    /* Neon Micro-Accents */
+    --accent: #818cf8;         /* Vibrant digital violet */
+    --teal: #2dd4bf;           /* Bio-luminance teal */
+    --coral: #f87171;          /* Alert / High velocity coral */
+    --amber: #fbbf24;          /* Warm processing system amber */
+  }
+
+  /* Structural Elements */
+  .hero-section {
+    position: relative; 
+    padding: 5rem 1.5rem 6rem 1.5rem; 
+    border-bottom: 1px solid var(--border-light); 
+    overflow: hidden;
+    background: var(--bg-primary);
+  }
+  
+  .hero-bg-grid {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background-image: radial-gradient(rgba(129, 140, 248, 0.07) 1.5px, transparent 1.5px); 
+    background-size: 24px 24px; 
+    z-index: 1; 
+    pointer-events: none;
+  }
+  
+  .hero-content {
+    position: relative; 
+    z-index: 2; 
+    max-width: 900px; 
+    margin: 0 auto; 
+    text-align: center;
+  }
+  
+  .hero-badge {
+    background: rgba(129, 140, 248, 0.12); 
+    color: var(--accent); 
+    font-weight: 700; 
+    font-size: 0.8rem; 
+    padding: 0.4rem 1.2rem; 
+    border-radius: 30px; 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 0.6rem; 
+    margin-bottom: 2rem;
+    border: 1px solid rgba(129, 140, 248, 0.15);
+  }
+  
+  .pulse-dot {
+    width: 8px; 
+    height: 8px; 
+    background: var(--teal); 
+    border-radius: 50%; 
+    display: inline-block; 
+    animation: pulse 1.8s infinite ease-in-out;
+    box-shadow: 0 0 8px var(--teal);
+  }
+  
+  .hero-title {
+    font-size: 3.25rem; 
+    font-weight: 850; 
+    letter-spacing: -0.03em; 
+    line-height: 1.15; 
+    color: var(--text-main); 
+    margin: 0 0 1.25rem 0;
+  }
+  
+  .gradient-text {
+    background: linear-gradient(135deg, var(--accent), var(--teal)); 
+    -webkit-background-clip: text; 
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.1rem; 
+    color: var(--text-muted); 
+    max-width: 660px; 
+    margin: 0 auto 3rem auto; 
+    line-height: 1.65;
+  }
+
+  /* Engine Input Architecture */
+  .omnibar-container {
+    display: flex; 
+    background: var(--bg-input); 
+    border: 1px solid var(--border-mid); 
+    padding: 0.5rem; 
+    border-radius: 18px; 
+    box-shadow: 0 20px 40px -15px rgba(2, 6, 12, 0.7); 
+    max-width: 820px; 
+    margin: 0 auto; 
+    align-items: center; 
+    gap: 0.5rem;
+  }
+  
+  .omnibar-input-group {
+    display: flex; 
+    align-items: center; 
+    padding-left: 0.75rem; 
+    gap: 0.5rem;
+  }
+  
+  .flex-input { flex: 1.4; }
+  .flex-select { flex: 0.8; }
+  
+  .omnibar-input-group input {
+    width: 100%; 
+    background: transparent;
+    border: none; 
+    padding: 0.6rem 0.5rem; 
+    outline: none; 
+    font-size: 0.92rem; 
+    color: var(--text-main); 
+    font-weight: 500;
+  }
+  .omnibar-input-group input::placeholder {
+    color: #475569;
+  }
+  
+  .omnibar-input-group select {
+    width: 100%; 
+    background: transparent; 
+    border: none; 
+    outline: none; 
+    color: var(--text-slate); 
+    font-size: 0.9rem; 
+    font-weight: 600; 
+    cursor: pointer; 
+    padding: 0.6rem 1rem 0.6rem 0;
+  }
+  .omnibar-input-group select option {
+    background: var(--bg-input);
+    color: var(--text-main);
+  }
+  
+  .omnibar-icon-accent { color: var(--accent); font-size: 1rem; }
+  .omnibar-icon-muted { color: #475569; font-size: 0.9rem; }
+  
+  .omnibar-divider {
+    width: 1px; 
+    height: 32px; 
+    background: var(--border-light);
+  }
+  
+  .engine-btn {
+    padding: 0.8rem 2rem; 
+    border-radius: 14px; 
+    font-weight: 700; 
+    font-size: 0.9rem;
+    background: var(--text-main); 
+    border: none; 
+    color: var(--bg-primary); 
+    transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s; 
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  
+  .engine-btn:hover {
+    background: #ffffff;
+    transform: scale(1.02);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+  }
+
+  /* Metric Indicators */
+  .metrics-container {
+    display: flex; 
+    justify-content: center; 
+    gap: 5rem; 
+    margin-top: 4rem; 
+    flex-wrap: wrap;
+  }
+  
+  .metric-block { text-align: center; }
+  .metric-num { font-size: 2rem; font-weight: 850; color: var(--text-main); letter-spacing: -0.02em; }
+  .metric-label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-top: 0.3rem; letter-spacing: 0.05em; }
+  .text-teal { color: var(--teal) !important; text-shadow: 0 0 10px rgba(45, 212, 191, 0.15); }
+
+  /* Section Terminal Interfaces */
+  .radar-section {
+    padding: 5rem 1.5rem; 
+    background: var(--bg-secondary);
+  }
+  
+  .radar-container {
+    max-width: 1060px; 
+    margin: 0 auto;
+  }
+  
+  .radar-header {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-end; 
+    margin-bottom: 2.5rem; 
+    flex-wrap: wrap; 
+    gap: 1.5rem;
+  }
+  
+  .radar-title { margin: 0; font-size: 1.5rem; font-weight: 800; color: var(--text-main); letter-spacing: -0.01em; }
+  .radar-subtitle { margin: 0.35rem 0 0 0; font-size: 0.9rem; color: var(--text-muted); }
+  
+  .sync-badge {
+    font-size: 0.75rem; 
+    color: var(--accent); 
+    font-weight: 700; 
+    background: var(--bg-card); 
+    padding: 0.5rem 1rem; 
+    border-radius: 8px; 
+    border: 1px solid var(--border-light); 
+    display: inline-flex; 
+    align-items: center; 
+    gap: 0.5rem;
+  }
+
+  /* Grid Interface Modules */
+  .heatmap-grid {
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); 
+    gap: 1.5rem;
+  }
+  
+  .node-card {
+    background: var(--bg-card); 
+    padding: 1.75rem; 
+    border-radius: 16px; 
+    border: 1px solid var(--border-light); 
+    cursor: pointer; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 1.5rem; 
+    justify-content: space-between; 
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s, box-shadow 0.25s;
+  }
+  
+  .node-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 30px -15px rgba(0, 0, 0, 0.5);
+  }
+
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  
+  .icon-box {
+    width: 46px; 
+    height: 46px; 
+    border-radius: 12px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 1.15rem;
+  }
+  
+  .status-pill { font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 6px; }
+  
+  .card-body h4 { margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
+  .card-body p { margin: 0.3rem 0 0 0; font-size: 0.85rem; color: var(--text-muted); }
+  
+  .progress-bar { width: 100%; height: 5px; background: var(--bg-secondary); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; }
+
+  /* Contextual Module Variants */
+  .card-dev:hover { border-color: var(--accent); box-shadow: 0 10px 20px -10px rgba(129, 140, 248, 0.15); }
+  .icon-dev { background: rgba(129, 140, 248, 0.12); color: var(--accent); }
+  .pill-dev { color: var(--teal); background: rgba(45, 212, 191, 0.12); }
+  .fill-dev { width: 85%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+
+  .card-design:hover { border-color: var(--teal); box-shadow: 0 10px 20px -10px rgba(45, 212, 191, 0.15); }
+  .icon-design { background: rgba(45, 212, 191, 0.12); color: var(--teal); }
+  .pill-stable { color: var(--text-muted); background: var(--bg-secondary); border: 1px solid var(--border-light); }
+  .fill-design { width: 55%; background: var(--teal); box-shadow: 0 0 8px var(--teal); }
+
+  .card-marketing:hover { border-color: var(--coral); box-shadow: 0 10px 20px -10px rgba(248, 113, 113, 0.15); }
+  .icon-marketing { background: rgba(248, 113, 113, 0.12); color: var(--coral); }
+  .pill-marketing { color: var(--coral); background: rgba(248, 113, 113, 0.12); }
+  .fill-marketing { width: 38%; background: var(--coral); box-shadow: 0 0 8px var(--coral); }
+
+  .card-product:hover { border-color: var(--amber); box-shadow: 0 10px 20px -10px rgba(251, 191, 24, 0.15); }
+  .icon-product { background: rgba(251, 191, 24, 0.12); color: var(--amber); }
+  .pill-product { color: var(--amber); background: rgba(251, 191, 24, 0.12); }
+  .fill-product { width: 25%; background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+
+  /* Fluid Responsive Adjustments */
+  @media (max-width: 768px) {
+    .hero-title { font-size: 2.25rem; }
+    .omnibar-container { flex-direction: column; padding: 0.75rem; border-radius: 16px; gap: 0.75rem; }
+    .omnibar-input-group { width: 100%; padding-left: 0.25rem; }
+    .omnibar-divider { display: none; }
+    .engine-btn { width: 100%; text-align: center; }
+    .metrics-container { gap: 2rem; }
+    .radar-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  }
+
+  /* Functional Animations */
+  @keyframes pulse { 
+    0%, 100% { opacity: 0.5; transform: scale(0.98); } 
+    50% { opacity: 1; transform: scale(1.08); box-shadow: 0 0 12px var(--teal); } 
+  }
+</style>
+
+<!-- ───────────── PAGE: COGNITIVE TALENT FEED & MATCH WORKSPACE ───────────── -->
+<!-- ───────────── PAGE: NEXT-GEN AI CAREER TERMINAL (JOBS DISCOVERY) ───────────── -->
+<div class="page active" id="page-jobs">
+  
+  <!-- INTERACTIVE HEADER: CAMPAIGN INSIGHTS & MODE CHANGER -->
+  <div class="terminal-header">
+    <div class="header-title-block">
+      <h2 class="main-title">Discover Your Next Venture</h2>
+      <p class="sub-title">AI-calibrated structural pairings tracking live enterprise opportunities.</p>
+    </div>
+    
+    <!-- INNOVATION: View Mode Switcher (Grid Feed vs Speed Swiper) -->
+    <div class="mode-switcher-container">
+      <button class="btn-mode active" id="view-mode-grid" onclick="switchJobFeedMode('grid')">
+        <i class="fas fa-th-large"></i> Smart Grid
+      </button>
+      <button class="btn-mode" id="view-mode-swipe" onclick="switchJobFeedMode('swipe')">
+        <i class="fas fa-bolt"></i> Speed Matcher
+      </button>
+    </div>
+  </div>
+
+  <div class="terminal-workspace">
+    
+    <!-- HIGH-PERFORMANCE FILTER SIDEBAR & INSIGHTS ENGINE -->
+    <aside class="filter-sidebar">
+      <div class="sidebar-section-header">
+        <h3>Control Filters</h3>
+        <button class="reset-link-btn" onclick="resetAllJobFilters()">Reset Matrix</button>
+      </div>
+
+      <!-- FILTER GROUP: JOB STRUCTURE -->
+      <div class="filter-group">
+        <h4>Commitment Model</h4>
+        <div class="checkbox-stack">
+          <label class="custom-checkbox">
+            <input type="checkbox" id="ft" checked onchange="renderJobs()">
+            <span class="checkbox-box"></span>
+            <span class="label-text">Full-time</span>
+          </label>
+          <label class="custom-checkbox">
+            <input type="checkbox" id="pt" checked onchange="renderJobs()">
+            <span class="checkbox-box"></span>
+            <span class="label-text">Part-time</span>
+          </label>
+          <label class="custom-checkbox">
+            <input type="checkbox" id="rem" onchange="renderJobs()">
+            <span class="checkbox-box"></span>
+            <span class="label-text">Remote Only</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- FILTER GROUP: EXPERIENCE INDEX -->
+      <div class="filter-group">
+        <h4>Experience Level</h4>
+        <div class="checkbox-stack">
+          <label class="custom-checkbox">
+            <input type="checkbox" id="entry" checked onchange="renderJobs()">
+            <span class="checkbox-box"></span>
+            <span class="label-text">Entry Matrix</span>
+          </label>
+          <label class="custom-checkbox">
+            <input type="checkbox" id="mid" checked onchange="renderJobs()">
+            <span class="checkbox-box"></span>
+            <span class="label-text">Mid Management</span>
+          </label>
+          <label class="custom-checkbox">
+            <input type="checkbox" id="senior" checked onchange="renderJobs()">
+            <span class="checkbox-box"></span>
+            <span class="label-text">Senior / Lead Principal</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- INNOVATION FILTER: EXPECTED MINIMUM SALARY SLIDER -->
+      <div class="filter-group no-border">
+        <div class="slider-header-meta">
+          <h4>Min Comp Floor</h4>
+          <span id="salaryValDisplay" class="counter-badge-teal">₹0L</span>
+        </div>
+        <div class="slider-wrapper">
+          <input type="range" id="salaryRangeInput" min="0" max="50" value="0" oninput="updateSalarySliderFilter(this.value)">
+          <div class="slider-track-fill"></div>
+        </div>
+      </div>
+
+      <!-- NEW INNOVATION: REAL-TIME PIPELINE TELEMETRY -->
+      <div class="telemetry-panel">
+        <div class="telemetry-row">
+          <span class="telemetry-dot-active"></span>
+          <span class="telemetry-text">Pipeline Status: Live Syncing</span>
+        </div>
+        <div class="telemetry-stats">
+          <div class="t-stat"><h5>1,240</h5><p>Total Nodes</p></div>
+          <div class="t-stat"><h5>418</h5><p>Matched</p></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN INTERACTIVE HUB FEED VIEWPORT -->
+    <main class="feed-viewport">
+      
+      <!-- INTEGRATED SEARCH & COMMAND ENGINE BAR -->
+      <div class="omnibar-search-widget">
+        <div class="input-icon-wrapper">
+          <i class="fas fa-search locator-icon"></i>
+          <input type="text" class="search-input" placeholder="Query keywords, operational code stacks, or enterprise targets..." id="mainSearch" oninput="renderJobs()">
+        </div>
+        
+        <div class="widget-divider"></div>
+        
+        <div class="select-dropdown-wrapper">
+          <select class="select-input" id="catFilter" onchange="renderJobs()">
+            <option value="All">All Sectors</option>
+            <option value="Development">Development Ecosystem</option>
+            <option value="Design">Creative UI/UX</option>
+            <option value="Marketing">Growth & Campaign</option>
+            <option value="Product">Product Strategy</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- INTERACTIVE VIEW SYSTEM NODES -->
+      <!-- VIEW A: STANDARD SMART MATCH GRID CONTAINER -->
+      <div class="jobs-view-container grid-mode-active" id="jobsGrid">
+        <!-- Mock UI Demonstration: Real Job Architecture Mock Nodes -->
+        <div class="job-card-wrapper card-tier-premium">
+          <div class="job-card-top">
+            <div class="company-signature">
+              <div class="company-logo-avatar bg-violet-tint">⚡</div>
+              <div>
+                <h4 class="job-title-text">Senior Backend Infrastructure Architect</h4>
+                <p class="company-name-text">Hyperion Systems</p>
+              </div>
+            </div>
+            <span class="match-score-badge">98% Match</span>
+          </div>
+          <p class="job-description-excerpt">Orchestrate zero-trust API networks, lower-latency internal transport layers, and coordinate container clusters over distributed geometric frameworks.</p>
+          <div class="job-tag-cloud">
+            <span class="meta-tag">Go</span>
+            <span class="meta-tag">Kubernetes</span>
+            <span class="meta-tag">gRPC</span>
+            <span class="meta-tag">Remote</span>
+          </div>
+          <div class="job-card-footer">
+            <div class="compensation-info">₹38L - ₹45L <span class="floor-label">/ annum</span></div>
+            <button class="action-terminal-btn">Engage Pipeline</button>
+          </div>
+        </div>
+
+        <div class="job-card-wrapper">
+          <div class="job-card-top">
+            <div class="company-signature">
+              <div class="company-logo-avatar bg-teal-tint">🎨</div>
+              <div>
+                <h4 class="job-title-text">Lead Interaction Designer (Design Systems)</h4>
+                <p class="company-name-text">Aether Labs</p>
+              </div>
+            </div>
+            <span class="match-score-badge">92% Match</span>
+          </div>
+          <p class="job-description-excerpt">Define cross-platform operational systems, craft layout design vectors, and standardize modular tokens for extensive scale e-commerce applications.</p>
+          <div class="job-tag-cloud">
+            <span class="meta-tag">Figma</span>
+            <span class="meta-tag">Tokens</span>
+            <span class="meta-tag">UI/UX</span>
+            <span class="meta-tag">Bangalore</span>
+          </div>
+          <div class="job-card-footer">
+            <div class="compensation-info">₹22L - ₹28L <span class="floor-label">/ annum</span></div>
+            <button class="action-terminal-btn">Engage Pipeline</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- INNOVATION VIEW B: SPEED SWIPER CONTAINER (HIDDEN VIA CONTAINER TOGGLES) -->
+      <div class="jobs-view-container" id="jobsSwipeDeck">
+        <div id="activeSwipeCardSlot">
+          <div class="swiper-deck-card">
+            <div class="deck-card-glow-layer"></div>
+            <div class="swiper-card-body">
+              <div class="swiper-meta-row">
+                <span class="swiper-hot-badge"><i class="fas fa-fire"></i> High Priority</span>
+                <span class="swiper-percentage">96% Fit</span>
+              </div>
+              <h3 class="swiper-job-title">Growth & Performance Marketing Principal</h3>
+              <p class="swiper-company-title">Vortex Media Group</p>
+              
+              <p class="swiper-body-copy">Scale user acquisition channels, engineer precise tracking vectors for multi-platform storefronts, and run analytical funnels on digital commerce conversion metrics.</p>
+              
+              <div class="swiper-spec-table">
+                <div class="spec-cell"><span class="cell-lbl">Floor Comp</span><span class="cell-val">₹18L min</span></div>
+                <div class="spec-cell"><span class="cell-lbl">Location</span><span class="cell-val">Remote / Delhi</span></div>
+              </div>
+            </div>
+            <div class="swiper-action-bar">
+              <button class="swipe-btn action-reject" onclick="handleSwipeAction('reject')"><i class="fas fa-times"></i> Pass</button>
+              <button class="swipe-btn action-accept" onclick="handleSwipeAction('accept')"><i class="fas fa-check"></i> Accept Node</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ───────────── DISCOVERY TERMINAL DARK ENGINE STYLESHEET ───────────── -->
+<style>
+  /* System Global Variables Scoped to Module */
+  :root {
+    --bg-terminal: #090d16;
+    --bg-surface-elevated: #0f1524;
+    --bg-surface-element: #172033;
+    --bg-control-inner: #121a2b;
+    --border-terminal-soft: #1e293b;
+    --border-terminal-heavy: #334155;
+    
+    /* Functional Palette Colors */
+    --font-color-primary: #f1f5f9;
+    --font-color-secondary: #94a3b8;
+    --font-color-muted: #475569;
+    
+    --brand-accent: #818cf8;
+    --brand-teal: #2dd4bf;
+    --brand-coral: #f87171;
+    --brand-amber: #fbbf24;
+  }
+
+  /* Header System Controls */
+  .terminal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-terminal-soft);
+  }
+  .main-title {
+    margin: 0 0 0.35rem 0;
+    font-size: 1.75rem;
+    font-weight: 850;
+    color: var(--font-color-primary);
+    letter-spacing: -0.02em;
+  }
+  .sub-title {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--font-color-secondary);
+  }
+
+  /* View Mode Switcher Toggle */
+  .mode-switcher-container {
+    background: var(--bg-control-inner);
+    padding: 0.35rem;
+    border-radius: 10px;
+    display: flex;
+    gap: 0.25rem;
+    border: 1px solid var(--border-terminal-soft);
+  }
+  .btn-mode {
+    background: transparent;
+    border: none;
+    padding: 0.5rem 1.25rem;
+    border-radius: 7px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--font-color-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-mode i { font-size: 0.85rem; }
+  .btn-mode.active {
+    background: var(--bg-surface-element);
+    color: var(--font-color-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    font-weight: 700;
+    border: 1px solid rgba(129, 140, 248, 0.2);
+  }
+
+  /* Layout Distribution Space */
+  .terminal-workspace {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+  /* Sidebar Core Controls */
+  .filter-sidebar {
+    width: 290px;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-terminal-soft);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 15px 35px -10px rgba(0,0,0,0.4);
+    position: sticky;
+    top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+  .sidebar-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .sidebar-section-header h3 {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--font-color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .reset-link-btn {
+    background: none;
+    border: none;
+    color: var(--brand-accent);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .reset-link-btn:hover { color: #a5b4fc; }
+
+  /* Filter Parameters Stacking */
+  .filter-group {
+    border-bottom: 1px solid var(--border-terminal-soft);
+    padding-bottom: 1.5rem;
+  }
+  .filter-group.no-border {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .filter-group h4 {
+    margin: 0 0 1rem 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--font-color-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .checkbox-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  /* Custom Native Checkbox Elements */
+  .custom-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--font-color-secondary);
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+  }
+  .custom-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  .checkbox-box {
+    width: 18px;
+    height: 18px;
+    background: var(--bg-control-inner);
+    border: 1px solid var(--border-terminal-heavy);
+    border-radius: 5px;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .custom-checkbox:hover input ~ .checkbox-box {
+    border-color: var(--brand-accent);
+  }
+  .custom-checkbox input:checked ~ .checkbox-box {
+    background: var(--brand-accent);
+    border-color: var(--brand-accent);
+  }
+  .checkbox-box:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 5px;
+    top: 2px;
+    width: 4px;
+    height: 8px;
+    border: solid #090d16;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .custom-checkbox input:checked ~ .checkbox-box:after {
+    display: block;
+  }
+  .label-text { transition: color 0.2s; }
+  .custom-checkbox input:checked ~ .label-text {
+    color: var(--font-color-primary);
+  }
+
+  /* Slider Dynamic Framework components */
+  .slider-header-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+  .counter-badge-teal {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--brand-teal);
+    background: rgba(45, 212, 191, 0.1);
+    padding: 0.15rem 0.5rem;
+    border-radius: 5px;
+    border: 1px solid rgba(45, 212, 191, 0.15);
+  }
+  .slider-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+  .slider-wrapper input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    background: var(--bg-control-inner);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+  }
+  .slider-wrapper input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--brand-accent);
+    box-shadow: 0 0 10px rgba(129, 140, 248, 0.5);
+    transition: transform 0.1s;
+  }
+  .slider-wrapper input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+  }
+
+  /* Innovation Sidebar Telemetry Display */
+  .telemetry-panel {
+    background: rgba(18, 26, 43, 0.6);
+    border: 1px solid var(--border-terminal-soft);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .telemetry-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .telemetry-dot-active {
+    width: 6px;
+    height: 6px;
+    background: var(--brand-teal);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--brand-teal);
+  }
+  .telemetry-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--font-color-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .telemetry-stats {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .t-stat h5 { margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--font-color-primary); }
+  .t-stat p { margin: 0; font-size: 0.7rem; color: var(--font-color-secondary); text-transform: uppercase; }
+
+  /* Main Feed Engine Window */
+  .feed-viewport {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  /* Integrated Search Component */
+  .omnibar-search-widget {
+    display: flex;
+    background: var(--bg-surface-elevated);
+    padding: 0.5rem;
+    border-radius: 14px;
+    border: 1px solid var(--border-terminal-soft);
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3);
+    align-items: center;
+  }
+  .input-icon-wrapper {
+    position: relative;
+    flex: 1.5;
+    display: flex;
+    align-items: center;
+    padding-left: 0.75rem;
+  }
+  .locator-icon { color: var(--font-color-muted); font-size: 0.95rem; }
+  .search-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 0.6rem 0.75rem;
+    outline: none;
+    font-size: 0.92rem;
+    color: var(--font-color-primary);
+    font-weight: 500;
+  }
+  .search-input::placeholder { color: var(--font-color-muted); }
+  
+  .widget-divider { width: 1px; height: 26px; background: var(--border-terminal-soft); }
+  
+  .select-dropdown-wrapper { flex: 0.8; padding-left: 0.5rem; }
+  .select-input {
+    width: 100%;
+    border: none;
+    padding: 0.6rem 1.5rem 0.6rem 0.5rem;
+    background: transparent;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--font-color-secondary);
+    outline: none;
+    cursor: pointer;
+  }
+  .select-input option {
+    background: var(--bg-surface-elevated);
+    color: var(--font-color-primary);
+  }
+
+  /* Responsive Display Switch Config mapping */
+  .jobs-view-container { display: none; }
+  .jobs-view-container.grid-mode-active {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+  .jobs-view-container.swipe-mode-active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 440px;
+  }
+
+  /* Job Cards Matrix Elements */
+  .job-card-wrapper {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-terminal-soft);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s;
+  }
+  .job-card-wrapper:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-terminal-heavy);
+  }
+  .card-tier-premium {
+    border-left: 3px solid var(--brand-accent);
+  }
+  
+  .job-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .company-signature { display: flex; gap: 0.85rem; align-items: center; }
+  .company-logo-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .bg-violet-tint { background: rgba(129, 140, 248, 0.12); color: var(--brand-accent); }
+  .bg-teal-tint { background: rgba(45, 212, 191, 0.12); color: var(--brand-teal); }
+  
+  .job-title-text { margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--font-color-primary); line-height: 1.3; }
+  .company-name-text { margin: 0.15rem 0 0 0; font-size: 0.82rem; color: var(--font-color-secondary); }
+  
+  .match-score-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--brand-teal);
+    background: rgba(45, 212, 191, 0.08);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    border: 1px solid rgba(45, 212, 191, 0.1);
+  }
+
+  .job-description-excerpt {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--font-color-secondary);
+    line-height: 1.5;
+  }
+
+  .job-tag-cloud { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .meta-tag {
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: var(--bg-surface-element);
+    color: var(--font-color-secondary);
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-terminal-soft);
+  }
+
+  .job-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.25rem;
+    border-top: 1px solid var(--border-terminal-soft);
+    padding-top: 1rem;
+  }
+  .compensation-info {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--font-color-primary);
+  }
+  .floor-label { font-size: 0.75rem; font-weight: 500; color: var(--font-color-muted); }
+  
+  .action-terminal-btn {
+    background: var(--font-color-primary);
+    color: var(--bg-terminal);
+    border: none;
+    padding: 0.55rem 1.15rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .action-terminal-btn:hover { background: #ffffff; transform: scale(1.02); }
+
+  /* Speed Deck Module View Structure */
+  .swiper-deck-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-terminal-heavy);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
+    position: relative;
+  }
+  .deck-card-glow-layer {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 4px;
+    background: linear-gradient(90deg, var(--brand-accent), var(--brand-teal));
+  }
+  .swiper-card-body { padding: 2rem; }
+  .swiper-meta-row { display: flex; justify-content: space-between; margin-bottom: 1.25rem; align-items: center; }
+  .swiper-hot-badge {
+    font-size: 0.72rem; font-weight: 700; color: var(--brand-coral);
+    background: rgba(248, 113, 113, 0.1); padding: 0.25rem 0.6rem; border-radius: 6px;
+  }
+  .swiper-percentage { font-size: 1.1rem; font-weight: 850; color: var(--brand-teal); }
+  .swiper-job-title { margin: 0 0 0.35rem 0; font-size: 1.35rem; font-weight: 850; color: var(--font-color-primary); line-height: 1.25; }
+  .swiper-company-title { margin: 0 0 1.5rem 0; font-size: 0.95rem; color: var(--brand-accent); font-weight: 600; }
+  .swiper-body-copy { margin: 0 0 1.75rem 0; font-size: 0.9rem; color: var(--font-color-secondary); line-height: 1.6; }
+  
+  .swiper-spec-table {
+    display: flex; background: var(--bg-control-inner); border-radius: 12px;
+    border: 1px solid var(--border-terminal-soft);
+  }
+  .spec-cell { flex: 1; padding: 0.85rem; display: flex; flex-direction: column; gap: 0.2rem; text-align: center; }
+  .spec-cell:first-child { border-right: 1px solid var(--border-terminal-soft); }
+  .cell-lbl { font-size: 0.68rem; text-transform: uppercase; color: var(--font-color-muted); font-weight: 700; letter-spacing: 0.04em; }
+  .cell-val { font-size: 0.88rem; color: var(--font-color-primary); font-weight: 600; }
+
+  .swiper-action-bar { display: flex; border-top: 1px solid var(--border-terminal-soft); background: var(--bg-control-inner); }
+  .swipe-btn {
+    flex: 1; background: transparent; border: none; padding: 1.25rem; font-size: 0.92rem;
+    font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background 0.2s;
+  }
+  .action-reject { color: var(--brand-coral); border-right: 1px solid var(--border-terminal-soft); }
+  .action-reject:hover { background: rgba(248, 113, 113, 0.05); }
+  .action-accept { color: var(--brand-teal); }
+  .action-accept:hover { background: rgba(45, 212, 191, 0.05); }
+
+  /* Media Breakpoints Container Optimization */
+  @media (max-width: 992px) {
+    .terminal-workspace { flex-direction: column; }
+    .filter-sidebar { width: 100%; position: relative; top: 0; }
+  }
+  @media (max-width: 576px) {
+    .terminal-header { flex-direction: column; align-items: flex-start; }
+    .mode-switcher-container { width: 100%; }
+    .btn-mode { flex: 1; justify-content: center; }
+    .omnibar-search-widget { flex-direction: column; align-items: stretch; padding: 0.75rem; gap: 0.5rem; }
+    .widget-divider { display: none; }
+    .select-dropdown-wrapper { padding-left: 0; }
+    .select-input { padding: 0.6rem 0.5rem; }
+    .job-card-footer { flex-direction: column; align-items: stretch; gap: 1rem; text-align: center; }
+  }
+</style>
+
+<!-- ───────────── PAGE: NEXT-GEN AI CAREER TERMINAL (COMPANIES DIRECTORY) ───────────── -->
+<div class="page active" id="page-companies">
+  
+  <!-- INTERACTIVE SECTION OVERVIEW -->
+  <section class="directory-section">
+    <div class="directory-header-meta">
+      <div class="title-cluster">
+        <h2 class="directory-main-title">Top Tier Workspaces</h2>
+        <p class="directory-sub-title">Discover enterprise nodes, digital ecosystems, and fast-growing commerce frameworks.</p>
+      </div>
+      <!-- LIVE COUNTER BADGE -->
+      <div class="live-nodes-indicator">
+        <span class="pulse-beacon"></span>
+        <span class="indicator-lbl">840 Active Pipeline Stacks</span>
+      </div>
+    </div>
+
+    <!-- HIGH-DENSITY ENTERPRISE MODULE GRID -->
+    <div class="directory-grid-mesh">
+      
+      <!-- NODE 1: GOOGLE -->
+      <div class="workspace-cluster-card tier-alpha" onclick="exploreEnterprisePipeline('Google')">
+        <div class="card-inner-glow"></div>
+        <div class="workspace-identity-row">
+          <div class="brand-avatar-box brand-google">
+            <i class="fab fa-google"></i>
+          </div>
+          <div class="badge-stack-right">
+            <span class="pioneer-pill pill-alpha">Tier-1 Node</span>
+            <span class="vector-count">142 Pipelines</span>
+          </div>
+        </div>
+        
+        <div class="workspace-body-meta">
+          <h3>Google Corp</h3>
+          <p class="geo-tag-text"><i class="fas fa-location-dot"></i> Mountain View, CA (Hybrid)</p>
+          <p class="workspace-abstract">Pioneering core infrastructural indexing algorithms, distributed consumer platforms, and deep learning neural modeling vectors at global scale.</p>
+        </div>
+
+        <div class="tech-vector-pool">
+          <span class="tech-tag">TensorFlow</span>
+          <span class="tech-tag">Go</span>
+          <span class="tech-tag">Kubernetes</span>
+          <span class="tech-tag">C++</span>
+        </div>
+
+        <div class="workspace-card-footer">
+          <div class="pipeline-status">Avg Comp: <span class="highlight-val">₹45L+</span></div>
+          <button class="terminal-action-trigger">Access Matrix <i class="fas fa-arrow-right-long"></i></button>
+        </div>
+      </div>
+
+      <!-- NODE 2: STRIPE -->
+      <div class="workspace-cluster-card tier-alpha" onclick="exploreEnterprisePipeline('Stripe')">
+        <div class="card-inner-glow"></div>
+        <div class="workspace-identity-row">
+          <div class="brand-avatar-box brand-stripe">
+            <i class="fab fa-stripe-s"></i>
+          </div>
+          <div class="badge-stack-right">
+            <span class="pioneer-pill pill-alpha">Fintech Core</span>
+            <span class="vector-count">34 Pipelines</span>
+          </div>
+        </div>
+        
+        <div class="workspace-body-meta">
+          <h3>Stripe International</h3>
+          <p class="geo-tag-text"><i class="fas fa-location-dot"></i> Remote / Dublin, IE</p>
+          <p class="workspace-abstract">Building programmable global economic infrastructure, high-fidelity ledger tooling, complex subscription matrices, and cross-border programmatic settlement layers.</p>
+        </div>
+
+        <div class="tech-vector-pool">
+          <span class="tech-tag">Ruby</span>
+          <span class="tech-tag">TypeScript</span>
+          <span class="tech-tag">AWS Cloud</span>
+          <span class="tech-tag">Kafka</span>
+        </div>
+
+        <div class="workspace-card-footer">
+          <div class="pipeline-status">Avg Comp: <span class="highlight-val">₹38L+</span></div>
+          <button class="terminal-action-trigger">Access Matrix <i class="fas fa-arrow-right-long"></i></button>
+        </div>
+      </div>
+
+      <!-- NODE 3: MEESHO -->
+      <div class="workspace-cluster-card tier-growth" onclick="exploreEnterprisePipeline('Meesho')">
+        <div class="card-inner-glow"></div>
+        <div class="workspace-identity-row">
+          <div class="brand-avatar-box brand-meesho">M</div>
+          <div class="badge-stack-right">
+            <span class="pioneer-pill pill-growth">High Velocity</span>
+            <span class="vector-count">56 Pipelines</span>
+          </div>
+        </div>
+        
+        <div class="workspace-body-meta">
+          <h3>Meesho Marketplace</h3>
+          <p class="geo-tag-text"><i class="fas fa-location-dot"></i> Bangalore, IN (On-Site)</p>
+          <p class="workspace-abstract">Engineering mass-scale dynamic catalog feeds, localized matching engines, algorithmic discovery tracks, and regional micro-distribution supply line interfaces.</p>
+        </div>
+
+        <div class="tech-vector-pool">
+          <span class="tech-tag">Java</span>
+          <span class="tech-tag">Spring Boot</span>
+          <span class="tech-tag">React Native</span>
+          <span class="tech-tag">MySQL</span>
+        </div>
+
+        <div class="workspace-card-footer">
+          <div class="pipeline-status">Avg Comp: <span class="highlight-val">₹28L+</span></div>
+          <button class="terminal-action-trigger">Access Matrix <i class="fas fa-arrow-right-long"></i></button>
+        </div>
+      </div>
+
+      <!-- NODE 4: AUTOMATTIC / ETSY ECOSYSTEMS -->
+      <div class="workspace-cluster-card tier-remote" onclick="exploreEnterprisePipeline('Etsy')">
+        <div class="card-inner-glow"></div>
+        <div class="workspace-identity-row">
+          <div class="brand-avatar-box brand-etsy">
+            <i class="fab fa-etsy"></i>
+          </div>
+          <div class="badge-stack-right">
+            <span class="pioneer-pill pill-remote">100% Remote</span>
+            <span class="vector-count">22 Pipelines</span>
+          </div>
+        </div>
+        
+        <div class="workspace-body-meta">
+          <h3>Etsy Commerce Corp</h3>
+          <p class="geo-tag-text"><i class="fas fa-location-dot"></i> Global Matrix / Remote</p>
+          <p class="workspace-abstract">Scaling niche listing search matrices, cloud image compression clusters for massive storefronts, digital product delivery structures, and distributed custom storefront engines.</p>
+        </div>
+
+        <div class="tech-vector-pool">
+          <span class="tech-tag">PHP 8</span>
+          <span class="tech-tag">React.js</span>
+          <span class="tech-tag">Elasticsearch</span>
+          <span class="tech-tag">GCP</span>
+        </div>
+
+        <div class="workspace-card-footer">
+          <div class="pipeline-status">Avg Comp: <span class="highlight-val">₹32L+</span></div>
+          <button class="terminal-action-trigger">Access Matrix <i class="fas fa-arrow-right-long"></i></button>
+        </div>
+      </div>
+
+      <!-- NODE 5: TECHVAULT OPERATIONS -->
+      <div class="workspace-cluster-card tier-stable" onclick="exploreEnterprisePipeline('TechVault')">
+        <div class="card-inner-glow"></div>
+        <div class="workspace-identity-row">
+          <div class="brand-avatar-box brand-tv">⚡</div>
+          <div class="badge-stack-right">
+            <span class="pioneer-pill pill-stable">Stable Flux</span>
+            <span class="vector-count">18 Pipelines</span>
+          </div>
+        </div>
+        
+        <div class="workspace-body-meta">
+          <h3>TechVault Infrastructure</h3>
+          <p class="geo-tag-text"><i class="fas fa-location-dot"></i> Delhi NCR, IN</p>
+          <p class="workspace-abstract">Architecting localized encrypted cloud hosting clusters, asset tokenization engines, cold storage frameworks, and secure high-availability operational terminal pipelines.</p>
+        </div>
+
+        <div class="tech-vector-pool">
+          <span class="tech-tag">Rust</span>
+          <span class="tech-tag">Docker</span>
+          <span class="tech-tag">PostgreSQL</span>
+          <span class="tech-tag">Node.js</span>
+        </div>
+
+        <div class="workspace-card-footer">
+          <div class="pipeline-status">Avg Comp: <span class="highlight-val">₹20L+</span></div>
+          <button class="terminal-action-trigger">Access Matrix <i class="fas fa-arrow-right-long"></i></button>
+        </div>
+      </div>
+
+      <!-- NODE 6: VORTEX ACQUISITION MEDIA -->
+      <div class="workspace-cluster-card tier-growth" onclick="exploreEnterprisePipeline('Vortex')">
+        <div class="card-inner-glow"></div>
+        <div class="workspace-identity-row">
+          <div class="brand-avatar-box brand-vortex">V</div>
+          <div class="badge-stack-right">
+            <span class="pioneer-pill pill-growth">Ad-Tech Core</span>
+            <span class="vector-count">12 Pipelines</span>
+          </div>
+        </div>
+        
+        <div class="workspace-body-meta">
+          <h3>Vortex Media Group</h3>
+          <p class="geo-tag-text"><i class="fas fa-location-dot"></i> Mumbai, IN / Remote</p>
+          <p class="workspace-abstract">Deploying algorithmic user acquisition models, tracking vectors across web interfaces, conversion metric aggregation pools, and cross-channel optimization programs.</p>
+        </div>
+
+        <div class="tech-vector-pool">
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">Next.js</span>
+          <span class="tech-tag">GraphQL</span>
+          <span class="tech-tag">BigQuery</span>
+        </div>
+
+        <div class="workspace-card-footer">
+          <div class="pipeline-status">Avg Comp: <span class="highlight-val">₹18L+</span></div>
+          <button class="terminal-action-trigger">Access Matrix <i class="fas fa-arrow-right-long"></i></button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<!-- ───────────── DIRECTORY ARCHITECTURE SYSTEM STYLES ───────────── -->
+<style>
+  /* System Dark Paradigm Injections */
+  :root {
+    --bg-terminal: #090d16;
+    --bg-surface-elevated: #0f1524;
+    --bg-surface-element: #172033;
+    --border-terminal-soft: #1e293b;
+    --border-terminal-heavy: #334155;
+    
+    --font-color-primary: #f1f5f9;
+    --font-color-secondary: #94a3b8;
+    --font-color-muted: #475569;
+    
+    --brand-accent: #818cf8;
+    --brand-teal: #2dd4bf;
+    --brand-coral: #f87171;
+    --brand-amber: #fbbf24;
+  }
+
+  /* Structure Configurations */
+  .directory-section {
+    padding: 2.5rem 1.5rem 5rem 1.5rem;
+    background: var(--bg-terminal);
+  }
+  
+  .directory-header-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+    border-bottom: 1px solid var(--border-terminal-soft);
+    padding-bottom: 1.75rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  
+  .directory-main-title {
+    margin: 0 0 0.35rem 0;
+    font-size: 1.85rem;
+    font-weight: 850;
+    color: var(--font-color-primary);
+    letter-spacing: -0.02em;
+  }
+  
+  .directory-sub-title {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--font-color-secondary);
+  }
+
+  /* Interactive Pulse Monitoring Element */
+  .live-nodes-indicator {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-terminal-soft);
+    padding: 0.5rem 1.15rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+  
+  .pulse-beacon {
+    width: 7px;
+    height: 7px;
+    background: var(--brand-teal);
+    border-radius: 50%;
+    display: inline-block;
+    animation: beaconPulse 2s infinite ease-in-out;
+    box-shadow: 0 0 8px var(--brand-teal);
+  }
+  
+  .indicator-lbl {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--font-color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Structural Adaptive Card Mesh Grid */
+  .directory-grid-mesh {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.75rem;
+  }
+
+  /* Enterprise Cluster Core Components */
+  .workspace-cluster-card {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-terminal-soft);
+    border-radius: 20px;
+    padding: 1.75rem;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .workspace-cluster-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--border-terminal-heavy);
+    box-shadow: 0 25px 45px -20px rgba(0, 0, 0, 0.6);
+  }
+
+  /* Card Inner Micro Highlight Layer */
+  .card-inner-glow {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 3px;
+    background: transparent;
+    transition: background 0.3s;
+  }
+  .workspace-cluster-card:hover .card-inner-glow {
+    background: linear-gradient(90deg, var(--brand-accent), var(--brand-teal));
+  }
+
+  /* Identity Row Parameters */
+  .workspace-identity-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .brand-avatar-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    font-weight: 850;
+    color: #ffffff;
+  }
+  
+  /* Brand Specific Aesthetic Enforcers */
+  .brand-google { background: #4285f4; box-shadow: 0 4px 14px rgba(66, 133, 244, 0.2); }
+  .brand-stripe { background: #635bff; box-shadow: 0 4px 14px rgba(99, 91, 255, 0.2); }
+  .brand-meesho { background: #ff4550; box-shadow: 0 4px 14px rgba(255, 69, 80, 0.2); }
+  .brand-etsy { background: #f1641e; box-shadow: 0 4px 14px rgba(241, 100, 30, 0.2); }
+  .brand-tv { background: linear-gradient(135deg, var(--brand-accent), #4f46e5); box-shadow: 0 4px 14px rgba(129, 140, 248, 0.2); }
+  .brand-vortex { background: #00bcd4; box-shadow: 0 4px 14px rgba(0, 188, 212, 0.2); }
+
+  .badge-stack-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+  }
+  
+  .pioneer-pill {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.2rem 0.55rem;
+    border-radius: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .pill-alpha { background: rgba(129, 140, 248, 0.12); color: var(--brand-accent); }
+  .pill-growth { background: rgba(248, 113, 113, 0.12); color: var(--brand-coral); }
+  .pill-remote { background: rgba(45, 212, 191, 0.12); color: var(--brand-teal); }
+  .pill-stable { background: rgba(251, 191, 24, 0.12); color: var(--brand-amber); }
+
+  .vector-count {
+    font-size: 0.75rem;
+    color: var(--font-color-secondary);
+    font-weight: 600;
+  }
+
+  /* Body Metadata Typography */
+  .workspace-body-meta h3 {
+    margin: 0 0 0.4rem 0;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--font-color-primary);
+  }
+  
+  .geo-tag-text {
+    margin: 0 0 0.85rem 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--font-color-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+  .geo-tag-text i { font-size: 0.75rem; color: var(--font-color-secondary); }
+
+  .workspace-abstract {
+    margin: 0;
+    font-size: 0.86rem;
+    color: var(--font-color-secondary);
+    line-height: 1.55;
+  }
+
+  /* Tech Tag Micro Arrays */
+  .tech-vector-pool {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+  
+  .tech-tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+    background: var(--bg-surface-element);
+    color: var(--font-color-secondary);
+    padding: 0.15rem 0.55rem;
+    border-radius: 5px;
+    border: 1px solid var(--border-terminal-soft);
+  }
+
+  /* Footer Parameters */
+  .workspace-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border-terminal-soft);
+    padding-top: 1rem;
+    margin-top: 0.25rem;
+  }
+  
+  .pipeline-status {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--font-color-muted);
+  }
+  
+  .highlight-val {
+    color: var(--font-color-primary);
+    font-weight: 700;
+  }
+
+  .terminal-action-trigger {
+    background: transparent;
+    border: none;
+    color: var(--brand-accent);
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: color 0.2s, transform 0.2s;
+  }
+  
+  .workspace-cluster-card:hover .terminal-action-trigger {
+    color: #a5b4fc;
+    transform: translateX(3px);
+  }
+
+  /* Responsive Systems Adaptive Adjustments */
+  @media (max-width: 768px) {
+    .directory-header-meta { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .live-nodes-indicator { width: 100%; justify-content: center; }
+    .directory-grid-mesh { grid-template-columns: 1fr; }
+  }
+
+  /* Keyframe Infrastructure animations */
+  @keyframes beaconPulse { 
+    0%, 100% { opacity: 0.5; transform: scale(0.98); } 
+    50% { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px var(--brand-teal); } 
+  }
+</style>
+
+<!-- ───────────── PAGE: TESTIMONIALS ───────────── -->
+<!-- ───────────── PAGE: NEXT-GEN AI CAREER TERMINAL (TESTIMONIALS DISCOVERY) ───────────── -->
+<div class="page active" id="page-testimonials">
+  
+  <!-- INTERACTIVE SECTION OVERVIEW -->
+  <section class="testimonials-section">
+    <div class="testimonials-header-meta">
+      <div class="title-cluster">
+        <h2 class="testimonials-main-title">Engineered Success</h2>
+        <p class="testimonials-sub-title">Hear directly from builders, growth hackers, and designers who optimized their professional trajectory.</p>
+      </div>
+      
+      <!-- REAL-TIME CONVERSION BADGE -->
+      <div class="conversion-telemetry-badge">
+        <span class="telemetry-spark"></span>
+        <span class="telemetry-data">Avg. Placement Window: 14 Business Days</span>
+      </div>
+    </div>
+
+    <!-- GLOBAL IMPACT AGGREGATOR BANNER -->
+    <div class="impact-metrics-row">
+      <div class="metric-node">
+        <h5>96.4%</h5>
+        <p>Pipeline Alignment</p>
+      </div>
+      <div class="metric-node">
+        <h5>₹42L</h5>
+        <p>Average Tier-1 Comp</p>
+      </div>
+      <div class="metric-node">
+        <h5>4.9 / 5</h5>
+        <p>Platform Satisfaction</p>
+      </div>
+    </div>
+
+    <!-- HIGH-DENSITY TESTIMONIAL GRID MESH -->
+    <div class="testimonials-grid-mesh">
+      
+      <!-- TESTIMONIAL 1: ANANYA RAO -->
+      <div class="testimonial-cluster-card tier-premium">
+        <div class="card-glow-accent"></div>
+        <div class="card-meta-top">
+          <div class="rating-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <span class="verification-tag"><i class="fas fa-shield-check"></i> Verified Core</span>
+        </div>
+        
+        <p class="testimonial-body-quote">
+          "The matching metrics cut down structural discovery timelines completely. I locked down an amazing opportunity scaling user retention tracks and running analytics funnels on digital commerce storefronts within 6 days!"
+        </p>
+        
+        <div class="author-identity-block">
+          <div class="author-avatar-box avatar-violet">AR</div>
+          <div class="author-text-stack">
+            <h4 class="author-name">Ananya Rao</h4>
+            <p class="author-headline">Growth & Campaign Specialist</p>
+            <p class="placement-destination">Placed at Vortex Media Group</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TESTIMONIAL 2: MARCUS K. -->
+      <div class="testimonial-cluster-card">
+        <div class="card-glow-accent"></div>
+        <div class="card-meta-top">
+          <div class="rating-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <span class="verification-tag"><i class="fas fa-shield-check"></i> Verified Core</span>
+        </div>
+        
+        <p class="testimonial-body-quote">
+          "The streamlined profile display matrices make showcasing infrastructure frameworks incredibly beautiful. The clean aesthetic, high scannability, and lightning-fast view toggles got my system architecture nodes noticed immediately."
+        </p>
+        
+        <div class="author-identity-block">
+          <div class="author-avatar-box avatar-teal">MK</div>
+          <div class="author-text-stack">
+            <h4 class="author-name">Marcus K.</h4>
+            <p class="author-headline">Lead Infrastructure Architect</p>
+            <p class="placement-destination">Placed at Hyperion Systems</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TESTIMONIAL 3: ROHIT S. -->
+      <div class="testimonial-cluster-card tier-premium">
+        <div class="card-glow-accent"></div>
+        <div class="card-meta-top">
+          <div class="rating-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <span class="verification-tag"><i class="fas fa-shield-check"></i> Verified Core</span>
+        </div>
+        
+        <p class="testimonial-body-quote">
+          "Transitioning across complex e-commerce development ecosystems is usually a data nightmare. This pipeline directly translated my experience building modular layout tokens and mass-scale product catalog feeds without friction."
+        </p>
+        
+        <div class="author-identity-block">
+          <div class="author-avatar-box avatar-amber">RS</div>
+          <div class="author-text-stack">
+            <h4 class="author-name">Rohit Sharma</h4>
+            <p class="author-headline">Lead Interaction & Frontend Engineer</p>
+            <p class="placement-destination">Placed at Meesho Marketplace</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TESTIMONIAL 4: LIAM D. -->
+      <div class="testimonial-cluster-card">
+        <div class="card-glow-accent"></div>
+        <div class="card-meta-top">
+          <div class="rating-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <span class="verification-tag"><i class="fas fa-shield-check"></i> Verified Core</span>
+        </div>
+        
+        <p class="testimonial-body-quote">
+          "I relied on the Speed Matcher swipe deck view to bypass cluttered board channels. The system efficiently targeted distributed networks optimizing heavy asset compression, remote delivery tech stacks, and cloud hosting pools."
+        </p>
+        
+        <div class="author-identity-block">
+          <div class="author-avatar-box avatar-coral">LD</div>
+          <div class="author-text-stack">
+            <h4 class="author-name">Liam Devine</h4>
+            <p class="author-headline">Principal Cloud Operations Node</p>
+            <p class="placement-destination">Placed at Etsy Commerce Corp</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<!-- ───────────── TESTIMONIALS DIRECTORY SYSTEM STYLES ───────────── -->
+<style>
+  /* Dark Paradigm Terminal Variables Scoped to Module */
+  :root {
+    --bg-terminal: #090d16;
+    --bg-surface-elevated: #0f1524;
+    --bg-surface-element: #172033;
+    --border-terminal-soft: #1e293b;
+    --border-terminal-heavy: #334155;
+    
+    --font-color-primary: #f1f5f9;
+    --font-color-secondary: #94a3b8;
+    --font-color-muted: #475569;
+    
+    --brand-accent: #818cf8;
+    --brand-teal: #2dd4bf;
+    --brand-coral: #f87171;
+    --brand-amber: #fbbf24;
+  }
+
+  /* Structural Base Configurations */
+  .testimonials-section {
+    padding: 2.5rem 1.5rem 5rem 1.5rem;
+    background: var(--bg-terminal);
+  }
+  
+  .testimonials-header-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-terminal-soft);
+    padding-bottom: 1.75rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  
+  .testimonials-main-title {
+    margin: 0 0 0.35rem 0;
+    font-size: 1.85rem;
+    font-weight: 850;
+    color: var(--font-color-primary);
+    letter-spacing: -0.02em;
+  }
+  
+  .testimonials-sub-title {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--font-color-secondary);
+  }
+
+  /* Telemetry Meta Indicators */
+  .conversion-telemetry-badge {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-terminal-soft);
+    padding: 0.5rem 1.15rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+  
+  .telemetry-spark {
+    width: 6px;
+    height: 6px;
+    background: var(--brand-accent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--brand-accent);
+  }
+  
+  .telemetry-data {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--font-color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Live Aggregations Metric Banner */
+  .impact-metrics-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-terminal-soft);
+    border-radius: 14px;
+    padding: 1.25rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+  }
+  
+  .metric-node {
+    border-right: 1px solid var(--border-terminal-soft);
+  }
+  .metric-node:last-child { border-right: none; }
+  .metric-node h5 { margin: 0 0 0.15rem 0; font-size: 1.4rem; font-weight: 850; color: var(--brand-teal); }
+  .metric-node p { margin: 0; font-size: 0.75rem; color: var(--font-color-secondary); text-transform: uppercase; letter-spacing: 0.03em; }
+
+  /* High Density Card Mesh Grid Layout */
+  .testimonials-grid-mesh {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.75rem;
+  }
+
+  /* Testimonial Modular Cards */
+  .testimonial-cluster-card {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-terminal-soft);
+    border-radius: 20px;
+    padding: 1.75rem;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s;
+  }
+  
+  .testimonial-cluster-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-terminal-heavy);
+  }
+  
+  .tier-premium {
+    border-left: 3px solid var(--brand-accent);
+  }
+
+  .card-glow-accent {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 3px;
+    background: transparent;
+    transition: background 0.3s;
+  }
+  .testimonial-cluster-card:hover .card-glow-accent {
+    background: linear-gradient(90deg, var(--brand-accent), var(--brand-teal));
+  }
+
+  /* Star and Security Verification Row */
+  .card-meta-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .rating-stars {
+    color: var(--brand-amber);
+    font-size: 0.8rem;
+    display: flex;
+    gap: 0.2rem;
+  }
+  
+  .verification-tag {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--brand-teal);
+    background: rgba(45, 212, 191, 0.08);
+    padding: 0.2rem 0.5rem;
+    border-radius: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  /* Body Quote Typography */
+  .testimonial-body-quote {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--font-color-primary);
+    line-height: 1.6;
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  /* Author Component Stacking block */
+  .author-identity-block {
+    display: flex;
+    gap: 0.85rem;
+    align-items: center;
+    border-top: 1px solid var(--border-terminal-soft);
+    padding-top: 1.25rem;
+  }
+  
+  .author-avatar-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    font-weight: 850;
+    color: #ffffff;
+    flex-shrink: 0;
+  }
+  
+  .avatar-violet { background: rgba(129, 140, 248, 0.2); color: var(--brand-accent); border: 1px solid rgba(129, 140, 248, 0.3); }
+  .avatar-teal { background: rgba(45, 212, 191, 0.2); color: var(--brand-teal); border: 1px solid rgba(45, 212, 191, 0.3); }
+  .avatar-amber { background: rgba(251, 191, 24, 0.2); color: var(--brand-amber); border: 1px solid rgba(251, 191, 24, 0.3); }
+  .avatar-coral { background: rgba(248, 113, 113, 0.2); color: var(--brand-coral); border: 1px solid rgba(248, 113, 113, 0.3); }
+
+  .author-text-stack { display: flex; flex-direction: column; gap: 0.15rem; }
+  .author-name { margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--font-color-primary); }
+  .author-headline { margin: 0; font-size: 0.78rem; color: var(--font-color-secondary); font-weight: 600; }
+  .placement-destination { margin: 0.15rem 0 0 0; font-size: 0.72rem; color: var(--brand-accent); font-weight: 700; }
+
+  /* Responsive Media Interface Layout Adjustments */
+  @media (max-width: 768px) {
+    .testimonials-header-meta { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .conversion-telemetry-badge { width: 100%; justify-content: center; }
+    .impact-metrics-row { grid-template-columns: 1fr; gap: 1.25rem; padding: 1.5rem; text-align: left; }
+    .metric-node { border-right: none; border-bottom: 1px solid var(--border-terminal-soft); padding-bottom: 0.75rem; }
+    .metric-node:last-child { border-bottom: none; padding-bottom: 0; }
+    .testimonials-grid-mesh { grid-template-columns: 1fr; }
+  }
+</style>
+
+<!-- ========================================== -->
+<!--       PAGE: RECRUITER PORTAL SYSTEM        -->
+<!-- ========================================== -->
+<div class="page active" id="page-recruiter">
+  <div class="dash-layout">
+    
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="dash-sidebar">
+      <div class="company-profile-node">
+        <div class="dash-avatar">HQ</div>
+        <div class="company-meta">
+          <h3>Recruiter Portal</h3>
+          <span class="tier-badge"><i class="fas fa-crown"></i> Enterprise Tier</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-navigation">
+        <ul class="dash-nav">
+          <li>
+            <a onclick="switchRecruiterTab('rec-listings')" id="nav-rec-listings" class="nav-item active">
+              <i class="fas fa-briefcase"></i> <span>Active Job Listings</span>
+            </a>
+          </li>
+          <li>
+            <a onclick="switchRecruiterTab('rec-talent')" id="nav-rec-talent" class="nav-item">
+              <i class="fas fa-users"></i> <span>Global Talent Pool</span>
+            </a>
+          </li>
+          <li>
+            <a onclick="switchRecruiterTab('rec-ai-screener')" id="nav-rec-ai-screener" class="nav-item">
+              <i class="fas fa-filter"></i> <span>Smart Candidate Ranker</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- MAIN INTERFACE VIEWPORT -->
+    <main class="dash-main">
+      
+      <!-- TOP ACTION BAR HEADER -->
+      <header class="dash-header-actions">
+        <div class="header-title-stack">
+          <h2>Job Campaign Management</h2>
+          <p class="section-sub">Track active applications, monitor candidate metrics, and publish new roles.</p>
+        </div>
+        <button class="btn btn-primary action-post-trigger" onclick="openRecruiterModal('modal-post-job')">
+          <i class="fas fa-plus"></i> Post a New Job
+        </button>
+      </header>
+
+      <!-- REAL-TIME PERFORMANCE METRICS ROW -->
+      <section class="metrics-dashboard-grid" aria-label="Recruitment Performance Statistics">
+        <div class="stat-card">
+          <div class="icon-frame frame-accent">
+            <i class="fas fa-eye"></i>
+          </div>
+          <div class="stat-text-block">
+            <span class="val">14.8k</span>
+            <span class="lbl">Listing Views This Week</span>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="icon-frame frame-teal">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <div class="stat-text-block">
+            <span class="val">382</span>
+            <span class="lbl">Total Resumes Reviewed</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="icon-frame frame-amber">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="stat-text-block">
+            <span class="val">24.3%</span>
+            <span class="lbl">Interview Booking Rate</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SUBSECTION: ACTIVE LISTINGS & INBOUND APPLICATION SUBMISSIONS -->
+      <section class="rec-section active" id="rec-listings">
+        <div class="workspace-table-card">
+          <div class="card-header-inline">
+            <h3>Recent Job Applications</h3>
+            <span class="live-indicator-tag"><span class="pulse-dot"></span> Live Feed</span>
+          </div>
+          
+          <div class="table-wrapper">
+            <table class="recruitment-data-table">
+              <thead>
+                <tr>
+                  <th>Candidate Info</th>
+                  <th>Target Role</th>
+                  <th>Match Rating</th>
+                  <th>Current Status</th>
+                  <th class="text-right">Management Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="candidate-primary-name">Rohan Sharma</div>
+                    <div class="candidate-secondary-meta">Delhi, IN • 4 Yrs Experience</div>
+                  </td>
+                  <td class="role-cell-highlight">Backend Engineer</td>
+                  <td>
+                    <span class="rating-badge rating-high">96% Score</span>
+                  </td>
+                  <td>
+                    <span class="status-pill status-interview"><i class="far fa-calendar-alt"></i> Interview Set</span>
+                  </td>
+                  <td class="text-right">
+                    <div class="action-button-cluster">
+                      <button class="btn btn-outline btn-sm" onclick="viewCandidateResume('rohan')" title="View PDF Resume"><i class="far fa-file-pdf"></i></button>
+                      <button class="btn btn-secondary btn-sm" onclick="triggerStatusUpdate('rohan')">Manage</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="candidate-primary-name">Sarah Jenkins</div>
+                    <div class="candidate-secondary-meta">Remote • 2.5 Yrs Experience</div>
+                  </td>
+                  <td class="role-cell-highlight">UI / UX Designer</td>
+                  <td>
+                    <span class="rating-badge rating-mid">88% Score</span>
+                  </td>
+                  <td>
+                    <span class="status-pill status-pending"><i class="far fa-clock"></i> Pending Review</span>
+                  </td>
+                  <td class="text-right">
+                    <div class="action-button-cluster">
+                      <button class="btn btn-outline btn-sm" onclick="viewCandidateResume('sarah')" title="View PDF Resume"><i class="far fa-file-pdf"></i></button>
+                      <button class="btn btn-secondary btn-sm" onclick="triggerStatusUpdate('sarah')">Manage</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SUBSECTION: GLOBAL TALENT POOL RECRUITING CANVAS -->
+      <section class="rec-section" id="rec-talent" style="display: none;">
+        <div class="workspace-filter-card">
+          <h3>Search Global Database</h3>
+          <div class="search-input-action-row">
+            <div class="input-with-icon-wrapper">
+              <i class="fas fa-search search-icon-embed"></i>
+              <input type="text" class="search-bar-input" placeholder="Search by skills, roles, or location (e.g., React, Node, Delhi)...">
+            </div>
+            <button class="btn btn-primary"><i class="fas fa-filter"></i> Filter Profiles</button>
+          </div>
+        </div>
+        
+        <div class="talent-pool-display-grid" id="talentPoolGrid">
+          <!-- Candidate Discovery Card -->
+          <div class="profile-discovery-card">
+            <div class="profile-top-summary">
+              <div class="profile-title-stack">
+                <h4>Aanya Sharma</h4>
+                <p>Senior Frontend Developer</p>
+              </div>
+              <span class="status-badge-inline profile-immediate">Available Now</span>
+            </div>
+            
+            <div class="skills-tag-group">
+              <span class="skill-pill-node">React</span>
+              <span class="skill-pill-node">TypeScript</span>
+              <span class="skill-pill-node">Next.js</span>
+            </div>
+            
+            <div class="profile-card-footer-actions">
+              <button class="btn btn-outline btn-sm style-flex-grow" onclick="openChatPipeline('aanya')"><i class="far fa-comment-dots"></i> Message</button>
+              <button class="btn btn-primary btn-sm style-flex-grow" onclick="inviteToInterview('aanya')">Invite to Apply</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SUBSECTION: AI CANDIDATE SCREENING ENGINE -->
+      <section class="rec-section" id="rec-ai-screener" style="display: none;">
+        <div class="workspace-filter-card">
+          <h3>Smart Matching Parameters</h3>
+          <p class="section-sub-alt">Adjust the filters below to instantly re-rank the candidate list based on priority metrics.</p>
+          
+          <div class="range-sliders-stack-layout">
+            <div class="slider-control-node">
+              <div class="slider-labels-row">
+                <span class="slider-title">Required Core Skills Match</span>
+                <span class="slider-percentage-value">80%</span>
+              </div>
+              <input type="range" class="custom-dashboard-range" min="0" max="100" value="80">
+            </div>
+            
+            <div class="slider-control-node">
+              <div class="slider-labels-row">
+                <span class="slider-title">Location & Work Zone Proximity</span>
+                <span class="slider-percentage-value">45%</span>
+              </div>
+              <input type="range" class="custom-dashboard-range" min="0" max="100" value="45">
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!--     MODAL: JOB CREATOR & CAMPAIGN STUDIO   -->
+<!-- ========================================== -->
+<div class="modal-wrapper" id="modal-post-job" style="display: none;">
+  
+  <div class="split-screen-modal-container">
+    
+    <!-- LEFT PANEL: CONTROL COMPOSER FRAME -->
+    <div class="modal-composer-column">
+      <header class="composer-header-block">
+        <div class="title-badge-alignment">
+          <h3><i class="fas fa-edit accent-icon"></i> Job Campaign Setup</h3>
+          <p>Fill out the fields to instantly build your public job listing card.</p>
+        </div>
+      </header>
+
+      <div class="composer-form-scroller">
+        <!-- INPUT: POSITION TITLE -->
+        <div class="form-group-block">
+          <label class="form-field-label">Job Title</label>
+          <div class="input-action-embed-wrapper">
+            <input type="text" id="new-job-title" oninput="updateLivePreview()" placeholder="e.g., Lead Fullstack Engineer" class="form-interactive-input">
+            <button onclick="triggerAiAutofillTitle()" class="embed-action-btn" type="button">
+              <i class="fas fa-wand-magic-sparkles"></i> Auto-Optimize
+            </button>
+          </div>
+        </div>
+
+        <!-- INPUT: CORE PARAMETERS GROUP -->
+        <div class="form-grid-dual-columns">
+          <div class="form-group-block">
+            <label class="form-field-label">Work Model</label>
+            <select id="new-job-loc" onchange="updateLivePreview()" class="form-interactive-select">
+              <option value="Remote (Global)">Remote (Global)</option>
+              <option value="Delhi NCR, IN">Delhi NCR, IN</option>
+              <option value="Bangalore, IN">Bangalore, IN</option>
+              <option value="Hybrid (Delhi)">Hybrid (Delhi)</option>
+            </select>
+          </div>
+          <div class="form-group-block">
+            <label class="form-field-label">Annual Salary Range</label>
+            <input type="text" id="new-job-sal" oninput="updateLivePreview()" placeholder="e.g., ₹24L - ₹30L" class="form-interactive-input">
+          </div>
+        </div>
+
+        <!-- INPUT: SKILLS PIPELINE -->
+        <div class="form-group-block">
+          <label class="form-field-label">Required Skills Stack <span class="label-instruction">(Press Enter to add)</span></label>
+          <div class="skills-input-pill-container" id="skillsTagContainer">
+            <input type="text" id="skillTagInput" placeholder="Add skills..." class="inline-pill-input" onkeydown="if(event.key==='Enter') { event.preventDefault(); injectSkillTag(this.value); }">
+          </div>
+        </div>
+
+        <!-- INPUT: JOB DESCRIPTION -->
+        <div class="form-group-block">
+          <div class="label-header-split-row">
+            <label class="form-field-label">Role Requirements</label>
+            <button onclick="aiGenerateJobDescription()" class="label-action-trigger-btn" type="button">
+              <i class="fas fa-magic"></i> AI Pre-Fill Requirements
+            </button>
+          </div>
+          <textarea id="new-job-desc" oninput="updateLivePreview()" placeholder="Outline key job roles, daily duties, and expected stack dependencies..." class="form-interactive-textarea"></textarea>
+        </div>
+      </div>
+
+      <!-- BOTTOM CONTROL FOOTER -->
+      <footer class="composer-action-footer">
+        <button class="btn btn-outline" onclick="closeRecruiterModal('modal-post-job')">Discard</button>
+        <button class="btn btn-primary deployed-btn-glow" onclick="submitNewJobCampaign()">Publish Job Listing</button>
+      </footer>
+    </div>
+
+    <!-- RIGHT PANEL: LIVE RENDER CARD PREVIEW -->
+    <div class="modal-preview-column">
+      
+      <!-- Close Trigger Button Top Corner -->
+      <button onclick="closeRecruiterModal('modal-post-job')" class="close-modal-circle-trigger" aria-label="Close Modal">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="preview-sticky-wrapper">
+        <div class="preview-live-meta-badge">
+          <span class="live-pulse-node"></span> Live Candidate View Preview
+        </div>
+
+        <!-- THE RENDERING CARD TARGET -->
+        <div class="live-rendered-job-card">
+          <div class="job-card-top-identity">
+            <div class="job-card-avatar-placeholder" id="preview-logo-placeholder">HQ</div>
+            <div class="job-card-title-block">
+              <h4 id="preview-title">Untitled Target Position</h4>
+              <p class="company-sub-title-text">NexHire Enterprise Solutions</p>
+            </div>
+          </div>
+
+          <!-- Dynamic Badge Tags -->
+          <div class="job-card-badges-row">
+            <span id="preview-loc" class="pill-badge location-badge">Remote (Global)</span>
+            <span id="preview-sal" class="pill-badge salary-badge">Competitive Range</span>
+          </div>
+
+          <!-- Dynamic Skill Tags Target Row -->
+          <div id="preview-live-skills" class="job-card-rendered-skills-row">
+            <span class="fallback-empty-string-text">No skills added yet</span>
+          </div>
+          
+          <p id="preview-desc" class="job-card-rendered-description-paragraph">
+            Fill out the requirement parameters in the left editor panel to systematically preview the text block here...
+          </p>
+        </div>
+
+        <!-- QUALITY ANALYSIS RADAR METRIC -->
+        <div class="ai-quality-aggregator-panel">
+          <div class="ai-quality-text-stack">
+            <h5>Listing Optimization Score</h5>
+            <p id="aiScoreLabel">Awaiting complete information structure.</p>
+          </div>
+          <div id="aiScoreMetric" class="ai-circular-score-node">
+            0%
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!--     CORE ARCHITECTURE CSS STYLES SHEET     -->
+<!-- ========================================== -->
+<style>
+  /* Base Variables Mapping */
+  :root {
+    --bg-main: #0b0f19;
+    --bg-surface: #111827;
+    --bg-element: #1f2937;
+    --border-soft: #374151;
+    --border-heavy: #4b5563;
+    
+    --text-main: #f9fafb;
+    --text-muted: #9ca3af;
+    --text-dark: #6b7280;
+    
+    --color-accent: #6c63ff;
+    --color-teal: #00d4aa;
+    --color-amber: #ffb800;
+    --color-red: #ef4444;
+    
+    --radius-lg: 16px;
+    --radius-md: 10px;
+    --radius-sm: 6px;
+    --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Global Application Overrides within scope */
+  #page-recruiter {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  /* Structural Columns Grid Setup */
+  .dash-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 100vh;
+  }
+
+  /* Sidebar Component Layout Styling */
+  .dash-sidebar {
+    background-color: var(--bg-surface);
+    border-right: 1px solid var(--border-soft);
+    padding: 2rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .company-profile-node {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .dash-avatar {
+    width: 46px;
+    height: 46px;
+    background: linear-gradient(135deg, var(--color-accent), #4f46e5);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: #fff;
+  }
+
+  .company-meta h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .tier-badge {
+    font-size: 0.72rem;
+    color: var(--color-amber);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 0.15rem;
+  }
+
+  /* Navigation Link Layout Links */
+  .dash-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1rem;
+    color: var(--text-muted);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+  }
+
+  .nav-item:hover, .nav-item.active {
+    background-color: var(--bg-element);
+    color: var(--text-main);
+  }
+
+  .nav-item.active {
+    border-left: 3px solid var(--color-accent);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding-left: 0.8rem;
+  }
+
+  /* Dashboard Viewport Frame */
+  .dash-main {
+    padding: 2.5rem;
+    overflow-y: auto;
+  }
+
+  .dash-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .header-title-stack h2 {
+    margin: 0 0 0.35rem 0;
+    font-size: 1.65rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .section-sub {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+  }
+
+  /* Primary Button Structure Style */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+  }
+
+  .btn-primary {
+    background-color: var(--color-accent);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    background-color: #5b52e6;
+    transform: translateY(-1px);
+  }
+
+  .btn-outline {
+    background-color: transparent;
+    border-color: var(--border-soft);
+    color: var(--text-main);
+  }
+  .btn-outline:hover {
+    background-color: var(--bg-element);
+    border-color: var(--border-heavy);
+  }
+
+  .btn-secondary {
+    background-color: var(--bg-element);
+    color: var(--text-main);
+    border-color: var(--border-soft);
+  }
+  .btn-secondary:hover {
+    background-color: var(--border-soft);
+  }
+
+  .btn-sm {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.8rem;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Metric Card Statistics Grids */
+  .metrics-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .stat-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .icon-frame {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+  }
+
+  .frame-accent { background: rgba(108, 99, 255, 0.12); color: var(--color-accent); }
+  .frame-teal { background: rgba(0, 212, 170, 0.12); color: var(--color-teal); }
+  .frame-amber { background: rgba(255, 184, 0, 0.12); color: var(--color-amber); }
+
+  .stat-text-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .stat-text-block .val {
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+
+  .stat-text-block .lbl {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* Custom Job Module System Tables */
+  .workspace-table-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+  }
+
+  .card-header-inline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .card-header-inline h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  .live-indicator-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-teal);
+    background: rgba(0, 212, 170, 0.08);
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--color-teal);
+    border-radius: 50%;
+    animation: pulseNodeKeyframe 1.8s infinite;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  .recruitment-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  .recruitment-data-table th {
+    padding: 0.85rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    border-bottom: 2px solid var(--border-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .recruitment-data-table td {
+    padding: 1.15rem 1rem;
+    font-size: 0.92rem;
+    border-bottom: 1px solid var(--border-soft);
+    vertical-align: middle;
+  }
+
+  .candidate-primary-name {
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .candidate-secondary-meta {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+  }
+
+  .role-cell-highlight {
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .rating-badge {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-sm);
+    display: inline-block;
+  }
+
+  .rating-high { background: rgba(0, 212, 170, 0.12); color: var(--color-teal); }
+  .rating-mid { background: rgba(255, 184, 0, 0.12); color: var(--color-amber); }
+
+  .status-pill {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .status-interview { background: rgba(108, 99, 255, 0.12); color: var(--color-accent); }
+  .status-pending { background: rgba(255, 184, 0, 0.12); color: var(--color-amber); }
+
+  .action-button-cluster {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+
+  .text-right { text-align: right; }
+
+  /* Talent Database View Sub-styles */
+  .workspace-filter-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .workspace-filter-card h3 { margin: 0 0 1rem 0; font-size: 1.15rem; }
+
+  .search-input-action-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .input-with-icon-wrapper {
+    position: relative;
+    flex: 1;
+    min-width: 260px;
+  }
+
+  .search-icon-embed {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-dark);
+  }
+
+  .search-bar-input {
+    width: 100%;
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-soft);
+    color: var(--text-main);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    outline: none;
+    font-size: 0.9rem;
+    transition: var(--transition-smooth);
+  }
+  .search-bar-input:focus { border-color: var(--color-accent); }
+
+  .talent-pool-display-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .profile-discovery-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.25rem;
+  }
+
+  .profile-top-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .profile-title-stack h4 { margin: 0; font-size: 1.05rem; font-weight: 700; }
+  .profile-title-stack p { margin: 0.15rem 0 0 0; font-size: 0.82rem; color: var(--text-muted); font-weight: 500; }
+
+  .status-badge-inline {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .profile-immediate { background: rgba(108, 99, 255, 0.15); color: #928eff; }
+
+  .skills-tag-group {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .skill-pill-node {
+    font-size: 0.75rem;
+    background-color: var(--bg-element);
+    color: var(--text-muted);
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+  }
+
+  .profile-card-footer-actions {
+    display: flex;
+    gap: 0.75rem;
+    border-top: 1px solid var(--border-soft);
+    padding-top: 1.25rem;
+  }
+  .style-flex-grow { flex: 1; }
+
+  /* Interactive Range Sliders Layout Config */
+  .section-sub-alt { margin: -0.65rem 0 1.5rem 0; font-size: 0.88rem; color: var(--text-muted); }
+  .range-sliders-stack-layout { display: flex; flex-direction: column; gap: 1.5rem; }
+  .slider-control-node { display: flex; flex-direction: column; gap: 0.5rem; }
+  .slider-labels-row { display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600; }
+  .slider-title { color: var(--text-main); }
+  .slider-percentage-value { color: var(--color-accent); font-weight: 700; }
+  
+  .custom-dashboard-range {
+    width: 100%;
+    accent-color: var(--color-accent);
+    background: var(--bg-element);
+    height: 6px;
+    border-radius: 3px;
+    outline: none;
+  }
+
+  /* ========================================== */
+  /*       MODAL INTERFACE CONTAINER SYSTEM     */
+  /* ========================================== */
+  .modal-wrapper {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(3, 7, 18, 0.75);
+    backdrop-filter: blur(12px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+
+  .split-screen-modal-container {
+    width: 100%;
+    max-width: 1080px;
+    height: 85vh;
+    max-height: 780px;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Left Panel Workspace Setup */
+  .modal-composer-column {
+    padding: 2.25rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border-right: 1px solid var(--border-soft);
+  }
+
+  .composer-header-block { margin-bottom: 1.75rem; }
+  .composer-header-block h3 { margin: 0 0 0.35rem 0; font-size: 1.35rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; }
+  .composer-header-block p { margin: 0; font-size: 0.85rem; color: var(--text-muted); }
+  .accent-icon { color: var(--color-accent); }
+
+  .composer-form-scroller {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .form-group-block { display: flex; flex-direction: column; gap: 0.45rem; }
+  .form-field-label { font-size: 0.8rem; font-weight: 700; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.04em; }
+  .label-instruction { font-size: 0.72rem; color: var(--text-dark); text-transform: none; font-weight: 500; }
+
+  /* Inputs Core Parameters Framework */
+  .input-action-embed-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .form-interactive-input, .form-interactive-select, .form-interactive-textarea {
+    width: 100%;
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-soft);
+    color: var(--text-main);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    outline: none;
+    font-family: inherit;
+    transition: var(--transition-smooth);
+  }
+  .form-interactive-input:focus, .form-interactive-select:focus, .form-interactive-textarea:focus { border-color: var(--color-accent); }
+
+  .embed-action-btn {
+    position: absolute;
+    right: 8px;
+    background-color: rgba(108, 99, 255, 0.15);
+    border: none;
+    color: #928eff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.45rem 0.85rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+  }
+  .embed-action-btn:hover { background-color: rgba(108, 99, 255, 0.25); }
+
+  .form-grid-dual-columns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+
+  /* Skills Interactive Inline Container */
+  .skills-input-pill-container {
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-md);
+    padding: 0.45rem 0.75rem;
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  .inline-pill-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    color: var(--text-main);
+    padding: 0.25rem 0;
+    font-size: 0.88rem;
+    flex: 1;
+    min-width: 100px;
+  }
+
+  /* Textarea Custom Label Layout Headers */
+  .label-header-split-row { display: flex; justify-content: space-between; align-items: center; }
+  .label-action-trigger-btn { background: none; border: none; color: var(--color-teal); font-size: 0.75rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.35rem; }
+  .label-action-trigger-btn:hover { color: #22ebd0; }
+  .form-interactive-textarea { min-height: 120px; resize: none; line-height: 1.5; }
+
+  /* Composer Footer Framework */
+  .composer-action-footer {
+    border-top: 1px solid var(--border-soft);
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+  }
+
+  .deployed-btn-glow { box-shadow: 0 4px 14px rgba(108, 99, 255, 0.35); }
+
+  /* Right Panel Live Preview Setup */
+  .modal-preview-column {
+    background-color: #0d121f;
+    padding: 2.25rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .close-modal-circle-trigger {
+    position: absolute;
+    top: 1.5rem; right: 1.5rem;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-soft);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+  }
+  .close-modal-circle-trigger:hover { background-color: var(--bg-element); color: var(--text-main); }
+
+  .preview-sticky-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .preview-live-meta-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .live-pulse-node {
+    width: 6px; height: 6px;
+    background-color: var(--color-accent);
+    border-radius: 50%;
+    animation: pulseNodeKeyframe 1.5s infinite;
+  }
+
+  /* Candidate Real Time Live Card Component */
+  .live-rendered-job-card {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    box-shadow: 0 15px 30px -5px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .job-card-top-identity { display: flex; align-items: center; gap: 0.85rem; }
+  
+  .job-card-avatar-placeholder {
+    width: 40px; height: 40px;
+    background-color: var(--bg-element);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: var(--color-accent);
+    font-size: 0.95rem;
+  }
+
+  .job-card-title-block h4 { margin: 0; font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
+  .company-sub-title-text { margin: 0.15rem 0 0 0; font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+
+  .job-card-badges-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .pill-badge { font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: var(--radius-sm); }
+  .location-badge { background-color: var(--bg-element); color: var(--text-main); }
+  .salary-badge { background-color: rgba(0, 212, 170, 0.08); color: var(--color-teal); font-weight: 700; }
+
+  .job-card-rendered-skills-row {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+    border-top: 1px dashed var(--border-soft);
+    padding-top: 1rem;
+  }
+  .fallback-empty-string-text { font-size: 0.75rem; color: var(--text-dark); font-style: italic; }
+
+  .job-card-rendered-description-paragraph {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 52px;
+  }
+
+  /* Quality Index Framework Display Widget */
+  .ai-quality-aggregator-panel {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    padding: 1.15rem 1.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .ai-quality-text-stack h5 { margin: 0; font-size: 0.88rem; font-weight: 700; color: var(--text-main); }
+  .ai-quality-text-stack p { margin: 0.2rem 0 0 0; font-size: 0.75rem; color: var(--text-muted); }
+
+  .ai-circular-score-node {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 3px solid var(--bg-element);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    flex-shrink: 0;
+  }
+
+  /* Pulse Animations Keyframes */
+  @keyframes pulseNodeKeyframe {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+  }
+
+  /* Responsive Adaptive Layout Adjustments */
+  @media (max-width: 960px) {
+    .dash-layout { grid-template-columns: 1fr; }
+    .dash-sidebar { border-right: none; border-bottom: 1px solid var(--border-soft); padding: 1.5rem; gap: 1.5rem; }
+    .split-screen-modal-container { grid-template-columns: 1fr; height: 95vh; max-height: none; }
+    .modal-preview-column { display: none; } /* Hide heavy structural live card preview on localized mobile layout viewports */
+    .metrics-dashboard-grid { grid-template-columns: 1fr; gap: 1rem; }
+  }
+</style>
+
+<!-- ───────────── PAGE: EMPLOYEE DASHBOARD (MODERNIZED) ───────────── -->
+<div class="page" id="page-employee-dash">
+  <div class="dash-layout">
+    
+    <!-- SIDEBAR NAVIGATION -->
+    <div class="dash-sidebar">
+      <div class="dash-avatar">JD</div>
+      <h3>John Doe</h3>
+      <p>Product & Design Professional</p>
+      <ul class="dash-nav">
+        <li>
+          <a onclick="switchDashTab('dash-overview')" id="nav-dash-overview" class="active">
+            <i class="fas fa-th-large"></i> Applications Pipeline
+          </a>
+        </li>
+        <li>
+          <a onclick="switchDashTab('dash-chat')" id="nav-dash-chat">
+            <i class="fas fa-wand-magic-sparkles"></i> AI Screening Center
+          </a>
+        </li>
+        <li>
+          <a onclick="switchDashTab('dash-saved')" id="nav-dash-saved">
+            <i class="fas fa-bookmark"></i> Saved Openings
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- MAIN INTERFACE VIEWPORT -->
+    <div class="dash-main">
+      
+      <!-- SUBSECTION: OVERVIEW (KANBAN & SCHEDULE) -->
+      <div class="dash-section active" id="dash-overview">
+        <div class="grid-2" style="margin-bottom: 1.5rem; gap: 1.5rem;">
+          
+          <!-- LIVE INTERVIEWS CALENDAR -->
+          <div class="call-card" style="padding: 1.5rem; border-radius: var(--radius, 12px); background: var(--card-bg, #fff); box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700;"><i class="fas fa-calendar-alt" style="color: var(--teal); margin-right: 0.5rem;"></i> Confirmed Interviews</h3>
+              <span class="badge" style="background: rgba(0, 212, 170, 0.1); color: var(--teal); font-size: 0.75rem; padding: 0.25rem 0.6rem;">2 Upcoming</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+              <div class="call-slot" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: var(--bg2, #f8f9fa); border-radius: 8px; border-left: 4px solid var(--teal);">
+                <div>
+                  <div style="font-weight: 600; font-size: 0.9rem;">Zara Khan</div>
+                  <div style="font-size: 0.75rem; color: var(--text2);">InnovateCo • Product Round</div>
+                </div>
+                <span class="time" style="font-weight: 700; font-size: 0.85rem; color: var(--teal);">11:00 AM</span>
+              </div>
+              <div class="call-slot" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: var(--bg2, #f8f9fa); border-radius: 8px; border-left: 4px solid var(--accent, #6c63ff);">
+                <div>
+                  <div style="font-weight: 600; font-size: 0.9rem;">Engineering Panel</div>
+                  <div style="font-size: 0.75rem; color: var(--text2);">TechVault • System Review</div>
+                </div>
+                <span class="time" style="font-weight: 700; font-size: 0.85rem; color: var(--accent);">02:00 PM</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- PROFILE OPTIMIZATION METRICS -->
+          <div class="card" style="padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <h3 style="margin: 0 0 0.25rem 0; font-size: 1.1rem; font-weight: 700;">ATS Profile Strength</h3>
+              <p style="font-size: 0.8rem; color: var(--text2); margin: 0;">Your profile discoverability rating across matching metrics.</p>
+            </div>
+            <div style="margin: 1.5rem 0;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-size: 2rem; font-weight: 800; color: var(--teal); line-height: 1;" id="ats-percentage">85%</span>
+                <span style="font-size: 0.8rem; font-weight: 600; color: var(--text2);" id="ats-status">Excellent Status</span>
+              </div>
+              <div class="progress" style="height: 8px; background: var(--border, #eee); border-radius: 4px; overflow: hidden;">
+                <div class="progress-fill" id="ats-progress-bar" style="width: 85%; height: 100%; background: var(--teal); transition: width 0.4s ease;"></div>
+              </div>
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text2); margin: 0; display: flex; align-items: center; gap: 0.4rem;">
+              <i class="fas fa-info-circle" style="color: var(--amber);"></i> Add explicit layout certifications to reach 100%.
+            </p>
+          </div>
+        </div>
+
+        <!-- VISUAL SUBMISSION KANBAN TRACKER -->
+        <div class="card" style="padding: 1.5rem;">
+          <h3 style="margin: 0 0 1.25rem 0; font-size: 1.1rem; font-weight: 700;">Interactive Tracker Pipeline</h3>
+          
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+            <!-- Column 1: Review Stage -->
+            <div style="background: var(--bg2, #f8f9fa); padding: 1rem; border-radius: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--text2);">Submitted</span>
+                <span class="badge" id="count-sub" style="background: var(--border); color: var(--text-main); font-weight: 700; font-size: 0.75rem; padding: 0.1rem 0.4rem; border-radius: 4px;">0</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem; min-height: 150px;" id="pipeline-submitted" ondragover="allowDrop(event)" ondrop="dropJob(event, 'pipeline-submitted')">
+                <!-- Empty State Placeholder Drop Zone -->
+              </div>
+            </div>
+
+            <!-- Column 2: Interviewing Stage -->
+            <div style="background: var(--bg2, #f8f9fa); padding: 1rem; border-radius: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--text2);">Interviewing</span>
+                <span class="badge" id="count-int" style="background: var(--amber); color: #fff; font-weight: 700; font-size: 0.75rem; padding: 0.1rem 0.4rem; border-radius: 4px;">1</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem; min-height: 150px;" id="pipeline-interviewing" ondragover="allowDrop(event)" ondrop="dropJob(event, 'pipeline-interviewing')">
+                <div class="card" id="job-card-1" style="padding: 0.85rem; border-left: 3px solid var(--amber); cursor: grab; box-shadow: 0 2px 4px rgba(0,0,0,0.02);" draggable="true" ondragstart="dragJob(event)">
+                  <div style="font-weight: 700; font-size: 0.85rem;">Product Manager</div>
+                  <div style="font-size: 0.75rem; color: var(--text2); margin-top: 0.15rem;">InnovateCo</div>
+                  <div style="font-size: 0.7rem; color: var(--text3); margin-top: 0.5rem;"><i class="far fa-clock"></i> Shortlisted May 19</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Column 3: Decision Stage -->
+            <div style="background: var(--bg2, #f8f9fa); padding: 1rem; border-radius: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <span style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--text2);">Offers Extended</span>
+                <span class="badge" id="count-off" style="background: var(--teal); color: #fff; font-weight: 700; font-size: 0.75rem; padding: 0.1rem 0.4rem; border-radius: 4px;">1</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem; min-height: 150px;" id="pipeline-offers" ondragover="allowDrop(event)" ondrop="dropJob(event, 'pipeline-offers')">
+                <div class="card" id="job-card-2" style="padding: 0.85rem; border-left: 3px solid var(--teal); cursor: grab; box-shadow: 0 2px 4px rgba(0,0,0,0.02);" draggable="true" ondragstart="dragJob(event)">
+                  <div style="font-weight: 700; font-size: 0.85rem;">Senior UX Designer</div>
+                  <div style="font-size: 0.75rem; color: var(--text2); margin-top: 0.15rem;">TechVault Inc.</div>
+                  <div style="font-size: 0.7rem; color: var(--teal); font-weight: 600; margin-top: 0.5rem;"><i class="fas fa-check-circle"></i> Verification Extended</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBSECTION: AI CHAT SCREENING INTERFACE -->
+      <div class="dash-section" id="dash-chat">
+        <div class="card" style="padding: 0; display: grid; grid-template-columns: 280px 1fr; height: 550px; overflow: hidden; border-radius: var(--radius, 12px);">
+          
+          <!-- Assessment Left Info Sidebar -->
+          <div style="border-right: 1px solid var(--border, #eee); background: var(--bg2, #f8f9fa); padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="width: 42px; height: 42px; background: rgba(108,99,255,0.1); color: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 1rem;">
+                <i class="fas fa-robot"></i>
+              </div>
+              <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; font-weight: 700;">AI Copilot Assessment</h4>
+              <p style="font-size: 0.78rem; color: var(--text2); line-height: 1.4; margin: 0;">Complete this conversational automated screening matrix to flag your profile for preferred hiring matching lists.</p>
+            </div>
+            <div style="padding: 0.75rem; background: #fff; border-radius: 8px; border: 1px solid var(--border);">
+              <div style="font-size: 0.7rem; text-transform: uppercase; font-weight: 700; color: var(--text3); margin-bottom: 0.25rem;">Session Status</div>
+              <div style="font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 0.4rem;" id="chat-stage-badge">
+                <span style="width: 8px; height: 8px; background: var(--teal); border-radius: 50%; display: inline-block;"></span> Active Screening Evaluation
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Conversation Module -->
+          <div style="display: flex; flex-direction: column; justify-content: space-between; background: #fff; height: 100%;">
+            <div class="chat-messages" id="chatWindow" style="padding: 1.5rem; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 1rem;">
+              <div class="msg recv" style="display: flex; gap: 0.75rem; max-width: 85%;">
+                <div class="msg-bubble" style="background: var(--bg2, #f8f9fa); padding: 0.85rem 1.25rem; border-radius: 4px 16px 16px 16px; font-size: 0.88rem; line-height: 1.45;">
+                  Hello John! I am your AI Career Copilot. Let's do a quick structural assessment. What core technical stack architectures or functional design frameworks do you optimize for?
+                </div>
+              </div>
+            </div>
+            
+            <!-- Contextual Quick Response Assist Chips -->
+            <div style="padding: 0 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;" id="preset-chips-container">
+              <button class="btn-chip" onclick="applyPresetText('Agile Frameworks & Design Thinking Systems')" style="background: none; border: 1px solid var(--border); padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; cursor: pointer; color: var(--text2);">Design Thinking & Agile</button>
+              <button class="btn-chip" onclick="applyPresetText('Full Stack System Architectures (React / Python)')" style="background: none; border: 1px solid var(--border); padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; cursor: pointer; color: var(--text2);">React & Frontend Stack</button>
+            </div>
+
+            <!-- Message Input Footbar -->
+            <div class="chat-input-bar" style="padding: 1rem 1.5rem; border-top: 1px solid var(--border, #eee); display: flex; gap: 0.75rem; align-items: center;">
+              <input type="text" class="chat-input" id="chatInputField" placeholder="Type structural engineering or background response..." onkeydown="if(event.key==='Enter') sendChatMessage()" style="flex: 1; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; outline: none; font-size: 0.88rem;">
+              <button class="btn btn-primary" onclick="sendChatMessage()" style="padding: 0.75rem 1.25rem; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SUBSECTION: SAVED HOUSINGS OPENINGS -->
+      <div class="dash-section" id="dash-saved">
+        <div style="margin-bottom: 1.5rem;">
+          <h2 style="font-size: 1.3rem; font-weight: 800; margin: 0 0 0.25rem 0;">Bookmarked Opportunities</h2>
+          <p class="section-sub" style="margin: 0;">Review and apply to standard listings you tracked for active followups.</p>
+        </div>
+        
+        <div class="grid-2" id="savedJobsGrid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+          
+          <!-- Saved Card 1 -->
+          <div class="card" id="saved-card-1" style="padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid var(--border); transition: all 0.25s ease;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                <div>
+                  <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700;">Principal Growth Strategist</h4>
+                  <div style="font-size: 0.8rem; color: var(--text2); margin-top: 0.15rem;">AlphaScale Ventures</div>
+                </div>
+                <button class="btn-icon" onclick="removeSavedCard('saved-card-1')" style="background: none; border: none; color: var(--coral, #ff4d4d); cursor: pointer;"><i class="fas fa-bookmark"></i></button>
+              </div>
+              <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap;">
+                <span class="badge" style="background: var(--bg2); color: var(--text2); font-size: 0.7rem; padding: 0.2rem 0.5rem;">Remote</span>
+                <span class="badge" style="background: var(--bg2); color: var(--text2); font-size: 0.7rem; padding: 0.2rem 0.5rem;">₹24L - ₹30L</span>
+              </div>
+            </div>
+            <div style="margin-top: 1.25rem; display: flex; gap: 0.5rem;">
+              <button class="btn btn-outline btn-sm" style="flex: 1; font-size: 0.8rem; padding: 0.5rem;" onclick="viewJobDetails('AlphaScale Ventures')">View Specification</button>
+              <button class="btn btn-primary btn-sm" style="flex: 1; font-size: 0.8rem; padding: 0.5rem;" onclick="applySavedJob('Principal Growth Strategist')">Apply Instantly</button>
+            </div>
+          </div>
+
+          <!-- Saved Card 2 -->
+          <div class="card" id="saved-card-2" style="padding: 1.25rem; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid var(--border); transition: all 0.25s ease;">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                <div>
+                  <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700;">Lead UX Researcher</h4>
+                  <div style="font-size: 0.8rem; color: var(--text2); margin-top: 0.15rem;">Studio-X Labs</div>
+                </div>
+                <button class="btn-icon" onclick="removeSavedCard('saved-card-2')" style="background: none; border: none; color: var(--coral, #ff4d4d); cursor: pointer;"><i class="fas fa-bookmark"></i></button>
+              </div>
+              <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap;">
+                <span class="badge" style="background: var(--bg2); color: var(--text2); font-size: 0.7rem; padding: 0.2rem 0.5rem;">Delhi, IN</span>
+                <span class="badge" style="background: var(--bg2); color: var(--text2); font-size: 0.7rem; padding: 0.2rem 0.5rem;">₹18L - ₹22L</span>
+              </div>
+            </div>
+            <div style="margin-top: 1.25rem; display: flex; gap: 0.5rem;">
+              <button class="btn btn-outline btn-sm" style="flex: 1; font-size: 0.8rem; padding: 0.5rem;" onclick="viewJobDetails('Studio-X Labs')">View Specification</button>
+              <button class="btn btn-primary btn-sm" style="flex: 1; font-size: 0.8rem; padding: 0.5rem;" onclick="applySavedJob('Lead UX Researcher')">Apply Instantly</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TOAST MESSAGE NOTIFIER -->
+<div class="notif-toast" id="toastContainer">
+  <span class="notif-icon" id="toastIcon">⚡</span>
+  <span class="notif-msg" id="toastMsg">Action recorded successfully!</span>
+</div>
+
+<!-- ───────────── FOOTER: COGNITIVE WORKSPACE COMMAND CENTER ───────────── -->
+<footer class="nexhire-footer">
+  <div class="footer-container">
+    
+    <!-- UPPER LAYER: BRANDING AND NAVIGATION -->
+    <div class="footer-upper">
+      
+      <!-- BRAND & SYSTEM HEALTH NODE -->
+      <div class="footer-brand-section">
+        <div class="footer-logo-area">
+          <div class="footer-logo-icon">N</div>
+          <span class="footer-logo-text">NexHire</span>
+        </div>
+        <p class="footer-description">
+          Predictive operational matching infrastructures connecting enterprise pipelines to technical talent spaces.
+        </p>
+        
+        <!-- SYSTEM HEALTH INDICATOR -->
+        <div class="footer-status-badge">
+          <span class="status-dot"></span>
+          <span class="status-text">Engine Core: <span id="footerHeartbeat" class="status-value">Nominal (0.4ms)</span></span>
+        </div>
+      </div>
+
+      <!-- NAVIGATION LINKS -->
+      <div class="footer-nav-groups">
+        <div class="footer-nav-column">
+          <h4 class="footer-nav-title">Platform Routing</h4>
+          <ul class="footer-nav-list">
+            <li><a onclick="showPage('home')" role="button" tabindex="0">Core Index Terminal</a></li>
+            <li><a onclick="showPage('jobs')" role="button" tabindex="0">Smart Matching Feed</a></li>
+            <li><a onclick="showPage('companies')" role="button" tabindex="0">Enterprise Node Matrix</a></li>
+          </ul>
+        </div>
+        
+        <!-- WORKSPACE CONTROLS -->
+        <div class="footer-nav-column">
+          <h4 class="footer-nav-title">Workspace Filters</h4>
+          <ul class="footer-nav-list">
+            <li>
+              <a onclick="toggleHighContrastWorkspace()" id="contrastBtn" role="button" tabindex="0" class="control-link">
+                <i class="fas fa-eye-slash" aria-hidden="true"></i> Contrast: Standard
+              </a>
+            </li>
+            <li>
+              <a onclick="simulatePipelineReboot()" role="button" tabindex="0" class="control-link">
+                <i class="fas fa-arrows-rotate" aria-hidden="true"></i> Flush Stream Cache
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SEPARATION BOUNDARY -->
+    <hr class="footer-divider" />
+
+    <!-- LOWER LAYER: POLICIES, METRICS, COPYRIGHT -->
+    <div class="footer-lower">
+      <div class="footer-copyright">
+        &copy; 2026 NexHire Platforms Inc. All global developer rights optimized.
+      </div>
+      
+      <!-- LIVE TELEMETRY LOGS -->
+      <div class="footer-telemetry">
+        <span class="telemetry-item">
+          <i class="fas fa-shield-halved" aria-hidden="true"></i> End-to-End Encrypted
+        </span>
+        <span class="telemetry-item">
+          <i class="fas fa-server" aria-hidden="true"></i> Node Cluster: IN-DEL-02
+        </span>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<style>
+  /* --- DESIGN SYSTEM TOKENS (DARK MODE) --- */
+  :root {
+    --fh-bg: #0f172a;          /* Rich slate dark background */
+    --fh-border: #1e293b;      /* Muted borders */
+    --fh-text-main: #94a3b8;    /* High-readability body text */
+    --fh-text-muted: #64748b;  /* Subtle secondary text */
+    --fh-text-dark: #f8fafc;   /* Crisp white/light headings */
+    --fh-text-light: #475569;  /* Deep dark footer legal notes */
+    --fh-accent: #818cf8;      /* Vibrant indigo accessible for dark UI */
+    --fh-teal: #2dd4bf;        /* Luminous turquoise accent */
+    --fh-font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  /* --- BASE STRUCTURING --- */
+  .nexhire-footer {
+    background-color: var(--fh-bg);
+    border-top: 1px solid var(--fh-border);
+    padding: 3rem 1.5rem 2rem 1.5rem;
+    color: var(--fh-text-main);
+    font-family: var(--fh-font);
+  }
+
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  /* --- UPPER AREA (BRAND & NAV) --- */
+  .footer-upper {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+  }
+
+  .footer-brand-section {
+    flex: 1 1 320px;
+    max-width: 360px;
+  }
+
+  .footer-logo-area {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .footer-logo-icon {
+    width: 26px;
+    height: 26px;
+    background: linear-gradient(135deg, var(--fh-accent), var(--fh-teal));
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0f172a;      /* Dark text inside vibrant logo badge */
+    font-weight: 800;
+    font-size: 0.75rem;
+  }
+
+  .footer-logo-text {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--fh-text-dark);
+    letter-spacing: -0.02em;
+  }
+
+  .footer-description {
+    font-size: 0.875rem;
+    color: var(--fh-text-main);
+    line-height: 1.6;
+    margin: 0 0 1.25rem 0;
+  }
+
+  /* STATUS BADGE */
+  .footer-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #1e293b;
+    border: 1px solid var(--fh-border);
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--fh-text-dark);
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--fh-teal);
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 8px var(--fh-teal);
+  }
+
+  .status-value {
+    color: var(--fh-teal);
+    font-weight: 700;
+  }
+
+  /* NAVIGATION LINKS */
+  .footer-nav-groups {
+    display: flex;
+    gap: 4rem;
+    flex-wrap: wrap;
+    flex: 2 1 400px;
+    justify-content: flex-end;
+  }
+
+  .footer-nav-column {
+    min-width: 160px;
+  }
+
+  .footer-nav-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--fh-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 1rem 0;
+  }
+
+  .footer-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .footer-nav-list a {
+    color: var(--fh-text-main);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.15s ease, transform 0.15s ease;
+    display: inline-block;
+  }
+
+  .footer-nav-list a:hover,
+  .footer-nav-list a:focus-visible {
+    color: var(--fh-accent);
+    transform: translateX(2px);
+    outline: none;
+  }
+
+  .control-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .control-link i {
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+
+  /* --- DIVIDER --- */
+  .footer-divider {
+    border: 0;
+    height: 1px;
+    background-color: var(--fh-border);
+    margin: 0;
+  }
+
+  /* --- LOWER AREA (METRICS & LEGAL) --- */
+  .footer-lower {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    font-size: 0.8rem;
+    color: var(--fh-text-muted);
+    font-weight: 500;
+  }
+
+  .footer-telemetry {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .telemetry-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .telemetry-item i {
+    font-size: 0.85rem;
+  }
+  
+  .telemetry-item .fa-shield-halved {
+    color: var(--fh-teal);
+  }
+
+  /* --- RESPONSIVE ADJUSTMENTS --- */
+  @media (max-width: 768px) {
+    .footer-upper {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .footer-nav-groups {
+      justify-content: flex-start;
+      gap: 2rem;
+      width: 100%;
+    }
+    
+    .footer-lower {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .footer-telemetry {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+</style>
+
+<script>
+  let currentAtsRating = 85;
+  let chatConversationStep = 1;
+
+  /* 1. STRUCTURAL TAB INTERACTION LAYER */
+  function switchDashTab(tabId) {
+    document.querySelectorAll('.dash-section').forEach(section => {
+      section.classList.remove('active');
+    });
+    document.querySelectorAll('.dash-nav a').forEach(navLink => {
+      navLink.classList.remove('active');
+    });
+    
+    document.getElementById(tabId).classList.add('active');
+    
+    const activeNavMap = {
+      'dash-overview': 'nav-dash-overview',
+      'dash-chat': 'nav-dash-chat',
+      'dash-saved': 'nav-dash-saved'
+    };
+    if (activeNavMap[tabId]) {
+      document.getElementById(activeNavMap[tabId]).classList.add('active');
+    }
+    showToast(`Navigated to dashboard view.`);
+  }
+
+  /* 2. DRAG & DROP PIPELINE CONTROLLER */
+  function dragJob(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+  }
+
+  function allowDrop(ev) {
+    ev.preventDefault();
+  }
+
+  function dropJob(ev, targetColId) {
+    ev.preventDefault();
+    const data = ev.dataTransfer.getData("text");
+    const draggedElement = document.getElementById(data);
+    const targetColumn = document.getElementById(targetColId);
+    
+    if (targetColumn && draggedElement) {
+      targetColumn.appendChild(draggedElement);
+      
+      // Contextual border modification mapping
+      if(targetColId === 'pipeline-submitted') draggedElement.style.borderLeftColor = 'var(--accent)';
+      if(targetColId === 'pipeline-interviewing') {
+        draggedElement.style.borderLeftColor = 'var(--amber)';
+        updateAtsMetric(3);
+      }
+      if(targetColId === 'pipeline-offers') {
+        draggedElement.style.borderLeftColor = 'var(--teal)';
+        updateAtsMetric(5);
+      }
+      
+      recalculatePipelineMetrics();
+      showToast("Pipeline entry successfully updated.");
+    }
+  }
+
+  function recalculatePipelineMetrics() {
+    document.getElementById('count-sub').innerText = document.getElementById('pipeline-submitted').children.length;
+    document.getElementById('count-int').innerText = document.getElementById('pipeline-interviewing').children.length;
+    document.getElementById('count-off').innerText = document.getElementById('pipeline-offers').children.length;
+  }
+
+  /* 3. AI CHAT CORE RESPONSE ENGINE */
+  function applyPresetText(text) {
+    document.getElementById('chatInputField').value = text;
+    document.getElementById('chatInputField').focus();
+  }
+
+  function sendChatMessage() {
+    const input = document.getElementById('chatInputField');
+    const msgText = input.value.trim();
+    if (!msgText) return;
+
+    const windowElement = document.getElementById('chatWindow');
+    
+    // Append client node
+    const userMsgRow = document.createElement('div');
+    userMsgRow.className = 'msg sent';
+    userMsgRow.innerHTML = `
+      <div class="msg-bubble" style="padding: 0.85rem 1.25rem; border-radius: 16px 4px 16px 16px; font-size: 0.88rem; line-height: 1.45;">
+        ${msgText}
+      </div>
+    `;
+    windowElement.appendChild(userMsgRow);
+    
+    input.value = '';
+    windowElement.scrollTop = windowElement.scrollHeight;
+
+    // Simulate response delay
+    setTimeout(() => {
+      const responseMsgRow = document.createElement('div');
+      responseMsgRow.className = 'msg recv';
+      responseMsgRow.style.display = 'flex';
+      responseMsgRow.style.gap = '0.75rem';
+      responseMsgRow.style.maxWidth = '85%';
+      
+      const badgeContainer = document.getElementById('chat-stage-badge');
+      const chipContainer = document.getElementById('preset-chips-container');
+      let botResponseText = "";
+
+      if (chatConversationStep === 1) {
+        botResponseText = `Perfect, structural profiling parameters applied for "${msgText}". Let's refine your match targets: Do you emphasize Distributed Remote setups or Hybrid workspace architectures?`;
+        badgeContainer.innerHTML = `<span style="width: 8px; height: 8px; background: var(--amber); border-radius: 50%; display: inline-block;"></span> Operational Model Evaluation`;
+        chipContainer.innerHTML = `
+          <button class="btn-chip" onclick="applyPresetText('100% Remote Architecture Ecosystems')" style="background: none; border: 1px solid var(--border); padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; cursor: pointer; color: var(--text2);">Fully Remote Model</button>
+          <button class="btn-chip" onclick="applyPresetText('Hybrid Workspace Environment Focus')" style="background: none; border: 1px solid var(--border); padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; cursor: pointer; color: var(--text2);">Hybrid Model</button>
+        `;
+        chatConversationStep = 2;
+        updateAtsMetric(5);
+      } else if (chatConversationStep === 2) {
+        botResponseText = `Preferences logged. Running final alignment checking parameters... Would you like to sync this profile optimization with the active tracking boards?`;
+        badgeContainer.innerHTML = `<span style="width: 8px; height: 8px; background: var(--accent); border-radius: 50%; display: inline-block;"></span> Final Sync Review`;
+        chipContainer.innerHTML = `
+          <button class="btn-chip" onclick="applyPresetText('Verify and execute synchronization script')" style="background: none; border: 1px solid var(--border); padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; cursor: pointer; color: var(--text2);">Sync and Complete</button>
+        `;
+        chatConversationStep = 3;
+        updateAtsMetric(5);
+      } else {
+        botResponseText = `Analysis complete! Matrix matching index successfully aligned. Your profile visibility rating is now optimized.`;
+        badgeContainer.innerHTML = `<span style="width: 8px; height: 8px; background: #22c55e; border-radius: 50%; display: inline-block;"></span> Evaluation Verified`;
+        chipContainer.innerHTML = ''; 
+        updateAtsMetric(5);
+      }
+
+      responseMsgRow.innerHTML = `
+        <div class="msg-bubble" style="background: var(--bg2, #f8f9fa); padding: 0.85rem 1.25rem; border-radius: 4px 16px 16px 16px; font-size: 0.88rem; line-height: 1.45;">
+          ${botResponseText}
+        </div>
+      `;
+      windowElement.appendChild(responseMsgRow);
+      windowElement.scrollTop = windowElement.scrollHeight;
+    }, 800);
+  }
+
+  /* PROFILE METRIC MUTATION LAYERS */
+  function updateAtsMetric(amount) {
+    currentAtsRating = Math.min(currentAtsRating + amount, 100);
+    
+    document.getElementById('ats-percentage').innerText = `${currentAtsRating}%`;
+    document.getElementById('ats-progress-bar').style.width = `${currentAtsRating}%`;
+    
+    const labelStatus = document.getElementById('ats-status');
+    if (currentAtsRating >= 95) labelStatus.innerText = "Elite Status Portfolio";
+    else if (currentAtsRating >= 85) labelStatus.innerText = "Excellent Status";
+    else labelStatus.innerText = "Standard Sync Tier";
+  }
+
+  /* 4. ACTIONS & OPENING HANDLERS */
+  function viewJobDetails(companyName) {
+    showToast(`Loading layout specification parameters for ${companyName}...`);
+  }
+
+  function applySavedJob(roleTitle) {
+    showToast(`Application successfully transferred for ${roleTitle}!`);
+  }
+
+  function removeSavedCard(cardId) {
+    const card = document.getElementById(cardId);
+    if (card) {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(10px)';
+      setTimeout(() => {
+        card.remove();
+        showToast("Opportunity configuration bookmark removed.");
+      }, 250);
+    }
+  }
+
+  /* 5. NATIVE SYSTEM TOAST MESSAGES */
+  function showToast(message) {
+    const toast = document.getElementById('toastContainer');
+    document.getElementById('toastMsg').innerText = message;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2800);
+  }
+
+  // Initialize counting state on page render
+  window.addEventListener('DOMContentLoaded', recalculatePipelineMetrics);
+// INNOVATIVE ACCESSIBILITY: Live Dynamic High-Contrast Mode Toggle
+let isHighContrastActive = false;
+
+function toggleHighContrastWorkspace() {
+  isHighContrastActive = !isHighContrastActive;
+  const contrastBtn = document.getElementById('contrastBtn');
+  
+  if (isHighContrastActive) {
+    // Inject custom structural CSS configuration override rules into root body elements
+    document.body.style.filter = "contrast(1.15) saturate(0.95)";
+    if (contrastBtn) {
+      contrastBtn.innerHTML = `<i class="fas fa-eye" style="font-size: 0.8rem; color: var(--accent);"></i> Contrast: Amplified`;
+      contrastBtn.style.color = "var(--accent, #6c63ff)";
+    }
+  } else {
+    document.body.style.filter = "none";
+    if (contrastBtn) {
+      contrastBtn.innerHTML = `<i class="fas fa-eye-slash" style="font-size: 0.8rem;"></i> Contrast: Standard`;
+      contrastBtn.style.color = "#64748b";
+    }
+  }
+}
+
+// INNOVATIVE ENGAGEMENT: Stream Cache Simulators
+function simulatePipelineReboot() {
+  const heartbeat = document.getElementById('footerHeartbeat');
+  if (heartbeat) {
+    heartbeat.innerText = "Flushing Buffers...";
+    heartbeat.style.color = "#ff6b6b";
+    
+    setTimeout(() => {
+      heartbeat.innerText = "Rebuilt Stack (0.1ms)";
+      heartbeat.style.color = "var(--teal, #00d4aa)";
+      alert("Application layer memory matrices successfully flushed. API telemetry streams recalibrated back to zero.");
+    }, 800);
+  }
+}
+
+// BACKGROUND PROCESSOR: Continual ping latency emulator updates
+setInterval(() => {
+  const heartbeat = document.getElementById('footerHeartbeat');
+  if (heartbeat && !heartbeat.innerText.includes("Flushing")) {
+    const freshLatency = (Math.random() * (0.6 - 0.2) + 0.2).toFixed(1);
+    heartbeat.innerText = `Nominal (${freshLatency}ms)`;
+  }
+}, 6000);
+  function triggerHeroSearch() {
+  const inputVal = document.getElementById('heroSearch').value.trim();
+  const locationFilter = document.getElementById('heroLocation').value;
+  
+  // Create an instrumentation parameters payload object
+  let targetSector = "All";
+  let extractedKeyword = inputVal;
+  
+  // INNOVATIVE: Natural Language Parser Simulation
+  const lowerInput = inputVal.toLowerCase();
+  if (lowerInput.includes('react') || lowerInput.includes('code') || lowerInput.includes('backend') || lowerInput.includes('frontend')) {
+    targetSector = "Development";
+  } else if (lowerInput.includes('design') || lowerInput.includes('figma') || lowerInput.includes('ui')) {
+    targetSector = "Design";
+  } else if (lowerInput.includes('marketing') || lowerInput.includes('growth') || lowerInput.includes('ads')) {
+    targetSector = "Marketing";
+  } else if (lowerInput.includes('product') || lowerInput.includes('manager') || lowerInput.includes('strategy')) {
+    targetSector = "Product";
+  }
+
+  // Handle routing navigation to the 'page-jobs' module workspace view cleanly
+  const homePage = document.getElementById('page-home');
+  const jobsPage = document.getElementById('page-jobs');
+  
+  if (homePage && jobsPage) {
+    homePage.classList.remove('active');
+    homePage.style.display = 'none';
+    
+    jobsPage.classList.add('active');
+    jobsPage.style.display = 'block';
+    
+    // Inject parsed search state variables directly into target interface elements
+    const mainSearchInput = document.getElementById('mainSearch');
+    const catFilterDropdown = document.getElementById('catFilter');
+    const remoteCheckbox = document.getElementById('rem');
+    
+    if (mainSearchInput) mainSearchInput.value = extractedKeyword;
+    if (catFilterDropdown) catFilterDropdown.value = targetSector;
+    
+    if (remoteCheckbox && (locationFilter === 'Remote' || lowerInput.includes('remote'))) {
+      remoteCheckbox.checked = true;
+    }
+    
+    // Trigger the dynamic matching array processing loop on the jobs feed template automatically
+    if (typeof renderJobs === 'function') {
+      renderJobs();
+    }
+  }
+}
+
+// Category Card Quick Vector Intersect Triggers
+function filterByCat(sectorName) {
+  const homePage = document.getElementById('page-home');
+  const jobsPage = document.getElementById('page-jobs');
+  
+  if (homePage && jobsPage) {
+    homePage.classList.remove('active');
+    homePage.style.display = 'none';
+    
+    jobsPage.classList.add('active');
+    jobsPage.style.display = 'block';
+    
+    const catFilterDropdown = document.getElementById('catFilter');
+    if (catFilterDropdown) {
+      catFilterDropdown.value = sectorName;
+    }
+    
+    if (typeof renderJobs === 'function') {
+      renderJobs();
+    }
+  }
+}
+  // Switching Dashboard Tabs
+function switchRecruiterTab(targetId) {
+  // Hide all inner tabs
+  const tabs = document.querySelectorAll('.dash-main .rec-section');
+  tabs.forEach(tab => tab.style.display = 'none');
+  
+  // Remove highlighted design class links
+  const links = document.querySelectorAll('.dash-sidebar .dash-nav a');
+  links.forEach(l => l.classList.remove('active'));
+
+  // Reveal target display container block
+  const targetedTab = document.getElementById(targetId);
+  if (targetedTab) {
+    targetedTab.style.display = (targetId === 'rec-listings') ? 'block' : 'grid';
+  }
+
+  // Set active sidebar hook highlight element
+  if (event && event.currentTarget) {
+    event.currentTarget.classList.add('active');
+  }
+}
+
+// Modal Toggle Hooks
+function openRecruiterModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeRecruiterModal(id) {
+  const modal = document.getElementById(id);
+  if (modal) modal.style.display = 'none';
+}
+
+function submitNewJobCampaign() {
+  // Add backend parsing / array push pipelines here
+  alert('Job campaign successfully processed and deployed live to NexHire system index!');
+  closeRecruiterModal('modal-post-job');
+}
+  function showDash(role, sectionId) {
+  // 1. Hide all active dashboard sections inside the viewport container
+  const sections = document.querySelectorAll('.dash-layout .dash-section');
+  sections.forEach(sec => sec.classList.remove('active'));
+
+  // 2. Remove active highlighting styling from all panel links
+  const links = document.querySelectorAll('.dash-sidebar .dash-nav a');
+  links.forEach(link => link.classList.remove('active'));
+
+  // 3. Mount and reveal the targeted DOM container element 
+  const targetSection = document.getElementById(`${role}-${sectionId}`);
+  if (targetSection) {
+    targetSection.classList.add('active');
+  }
+
+  // 4. Set current selected highlighted design onto user target clicked path
+  if (event && event.currentTarget) {
+    event.currentTarget.classList.add('active');
+  }
+}
+  // Dynamic Core State Arrays
+  let jobsData = [
+    { id: 1, title: "Senior UX Designer", company: "TechVault", location: "Delhi, IN", category: "Design", type: "Full-time", exp: "Senior / Lead", salary: "$110k - $130k", initial: "T", color: "#6c63ff", posted: "2 hours ago" },
+    { id: 2, title: "Product Manager", company: "InnovateCo", location: "Remote", category: "Product", type: "Full-time", exp: "Mid Level", salary: "$140k - $160k", initial: "I", color: "#00d4aa", posted: "1 day ago" },
+    { id: 3, title: "Frontend Developer (React)", company: "Stripe Tech", location: "Bangalore, IN", category: "Development", type: "Full-time", exp: "Mid Level", salary: "$90k - $110k", initial: "S", color: "#ffd93d", posted: "3 days ago" },
+    { id: 4, title: "Growth Marketer", company: "Oasis Digital", location: "Mumbai, IN", category: "Marketing", type: "Part-time", exp: "Entry Level", salary: "$50k - $70k", initial: "O", color: "#ff6b6b", posted: "4 days ago" }
+  ];
+
+  let savedJobIds = [1];
+
+  // Client Routing System
+  function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    
+    const targetPage = document.getElementById('page-' + pageId);
+    if(targetPage) targetPage.classList.add('active');
+    
+    const targetNav = document.getElementById('nav-' + pageId);
+    if(targetNav) targetNav.classList.add('active');
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if(pageId === 'jobs') renderJobs();
+    if(pageId === 'employee-dash') {
+      switchDashTab('dash-overview');
+    }
+  }
+
+  function toggleMobileNav() {
+    const navLinks = document.getElementById('navLinks');
+    navLinks.style.display = (navLinks.style.display === 'flex') ? 'none' : 'flex';
+    navLinks.style.flexDirection = 'column';
+    navLinks.style.position = 'absolute';
+    navLinks.style.top = '64px';
+    navLinks.style.left = '0';
+    navLinks.style.width = '100%';
+    navLinks.style.background = 'var(--bg2)';
+    navLinks.style.padding = '1rem';
+  }
+
+  // Modals Framework
+  function openModal(id) { document.getElementById(id).classList.add('open'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+  // Search Engine Framework
+  function triggerHeroSearch() {
+    const text = document.getElementById('heroSearch').value;
+    const loc = document.getElementById('heroLocation').value;
+    showPage('jobs');
+    document.getElementById('mainSearch').value = text;
+    renderJobs();
+  }
+
+  function filterByCat(cat) {
+    showPage('jobs');
+    document.getElementById('catFilter').value = cat;
+    renderJobs();
+  }
+
+  // Render Job System Card Engine
+  function renderJobs() {
+    const grid = document.getElementById('jobsGrid');
+    if(!grid) return;
+    
+    const searchText = document.getElementById('mainSearch').value.toLowerCase();
+    const catSelection = document.getElementById('catFilter').value;
+    
+    const filterFt = document.getElementById('ft').checked;
+    const filterPt = document.getElementById('pt').checked;
+    const filterRem = document.getElementById('rem').checked;
+    
+    const filterEntry = document.getElementById('entry').checked;
+    const filterMid = document.getElementById('mid').checked;
+    const filterSenior = document.getElementById('senior').checked;
+
+    let filtered = jobsData.filter(job => {
+      // Input verification matches
+      if(searchText && !job.title.toLowerCase().includes(searchText) && !job.company.toLowerCase().includes(searchText)) return false;
+      if(catSelection !== 'All' && job.category !== catSelection) return false;
+      
+      // Node Check options
+      if(!filterFt && job.type === 'Full-time') return false;
+      if(!filterPt && job.type === 'Part-time') return false;
+      if(filterRem && !job.location.toLowerCase().includes('remote')) return false;
+      
+      // Rank experience checks
+      if(!filterEntry && job.exp === 'Entry Level') return false;
+      if(!filterMid && job.exp === 'Mid Level') return false;
+      if(!filterSenior && job.exp === 'Senior / Lead') return false;
+      
+      return true;
+    });
+
+    if(filtered.length === 0) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column: span 2;"><i class="fas fa-folder-open"></i><h3>No openings found matching current pipelines.</h3></div>`;
+      return;
+    }
+
+    grid.innerHTML = filtered.map(job => {
+      const isSaved = savedJobIds.includes(job.id);
+      return `
+        <div class="card job-card">
+          <div class="job-card-header">
+            <div class="company-logo" style="background:${job.color}">${job.initial}</div>
+            <div style="flex:1;">
+              <h3>${job.title}</h3>
+              <div class="company">${job.company} — <em>${job.location}</em></div>
+            </div>
+            <button class="save-btn ${isSaved ? 'saved' : ''}" onclick="toggleSaveJob(event, ${job.id})">
+              <i class="fas fa-bookmark"></i>
+            </button>
+          </div>
+          <div class="job-meta">
+            <span class="tag tag-purple">${job.type}</span>
+            <span class="tag tag-teal">${job.category}</span>
+            <span class="tag tag-amber">${job.exp}</span>
+          </div>
+          <div class="job-card-footer">
+            <span class="salary">${job.salary}</span>
+            <span class="posted">${job.posted}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Bookmarking Engine Operations
+  function toggleSaveJob(event, id) {
+    event.stopPropagation();
+    if(savedJobIds.includes(id)) {
+      savedJobIds = savedJobIds.filter(jId => jId !== id);
+      showToast("🗑️", "Removed from configurations.");
+    } else {
+      savedJobIds.push(id);
+      showToast("⭐", "Added to saved listings dashboard.");
+    }
+    renderJobs();
+    renderSavedJobs();
+  }
+
+  function renderSavedJobs() {
+    const grid = document.getElementById('savedJobsGrid');
+    if(!grid) return;
+    let filtered = jobsData.filter(j => savedJobIds.includes(j.id));
+    if(filtered.length === 0) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column: span 2;"><i class="fas fa-bookmark"></i><h3>No saved bookmarks present.</h3></div>`;
+      return;
+    }
+    grid.innerHTML = filtered.map(job => `
+      <div class="card">
+        <h3>${job.title}</h3>
+        <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem;">${job.company} — ${job.location}</p>
+        <button class="btn btn-danger btn-sm" onclick="toggleSaveJob(event, ${job.id})">Delete Tracking</button>
+      </div>
+    `).join('');
+  }
+
+  // Dashboard Tab Switching Framework
+  function switchDashTab(tabId) {
+    document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.dash-nav a').forEach(a => a.classList.remove('active'));
+    
+    document.getElementById(tabId).classList.add('active');
+    document.getElementById('nav-' + tabId).classList.add('active');
+    if(tabId === 'dash-saved') renderSavedJobs();
+  }
+
+  // System Post Job Intermediary Function
+  function handleJobPost(e) {
+    e.preventDefault();
+    const title = document.getElementById('postTitle').value;
+    const company = document.getElementById('postCompany').value;
+    const location = document.getElementById('postLocation').value;
+    const category = document.getElementById('postCategory').value;
+    const salary = document.getElementById('postSalary').value;
+
+    const newJob = {
+      id: jobsData.length + 1,
+      title, company, location, category,
+      type: "Full-time", exp: "Mid Level", salary,
+      initial: company.charAt(0).toUpperCase(),
+      color: "var(--accent)", posted: "Just Now"
+    };
+
+    jobsData.unshift(newJob);
+    closeModal('postJobModal');
+    document.getElementById('jobPostForm').reset();
+    showToast("🚀", "New opening live on index nodes!");
+    showPage('jobs');
+  }
+
+  // Chat Screen Assessment Mock Bot Interface
+  function sendChatMessage() {
+    const input = document.getElementById('chatInputField');
+    if(!input.value.trim()) return;
+    
+    const win = document.getElementById('chatWindow');
+    win.innerHTML += `
+      <div class="msg sent">
+        <div class="msg-bubble">${input.value}</div>
+        <div class="msg-time">Just Now</div>
+      </div>
+    `;
+    
+    const userText = input.value;
+    input.value = '';
+    win.scrollTop = win.scrollHeight;
+
+    setTimeout(() => {
+      win.innerHTML += `
+        <div class="msg recv">
+          <div class="msg-bubble">Understood. Logged response context: "${userText}". Parsing profile metrics for core alignments...</div>
+          <div class="msg-time">Just Now</div>
+        </div>
+      `;
+      win.scrollTop = win.scrollHeight;
+    }, 1000);
+  }
+
+  // Notify Status Toast Engine
+  function showToast(icon, message) {
+    const el = document.getElementById('toastContainer');
+    document.getElementById('toastIcon').innerText = icon;
+    document.getElementById('toastMsg').innerText = message;
+    el.style.display = 'flex';
+    setTimeout(() => el.style.display = 'none', 3000);
+  }
+</script>
+</body>
+</html>
